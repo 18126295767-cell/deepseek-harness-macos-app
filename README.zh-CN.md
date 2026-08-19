@@ -27,7 +27,7 @@
 版本，以及本地 DeepSeek Harness 运行时。
 
 ```bash
-./scripts/build-app.sh \
+zsh ./build-app.sh \
   --dsh-runtime /绝对路径/dsh-runtime \
   --install
 ```
@@ -39,8 +39,16 @@
 仅构建不安装：
 
 ```bash
-./scripts/build-app.sh --dsh-runtime /绝对路径/dsh-runtime
+zsh ./build-app.sh --dsh-runtime /绝对路径/dsh-runtime
 ```
+
+脚本同时兼容标准源码目录与 GitHub 网页上传形成的扁平目录。本公开仓库采用根目录扁平
+结构：请将 `build-app.sh`、`main.swift`、`Info.plist`、`icon-source.svg`、
+`DeepSeekHarness.icns` 和 `com.houxinran.deepseek-harness.plist.template` 保持在仓库
+根目录。使用 `zsh` 调用脚本，可以避免 GitHub 网页上传未保留可执行权限时构建失败。
+
+完整步骤见 [中文可复现构建教程](TUTORIAL.zh-CN.md)，英文教程见
+[TUTORIAL.md](TUTORIAL.md)。
 
 ## 运行行为
 
