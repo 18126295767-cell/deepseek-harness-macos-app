@@ -1,0 +1,78 @@
+[CmdletBinding()]
+param(
+  [string]$DshRuntime = "$env:USERPROFILE\dsh-runtime",
+  [ValidateRange(1, 65535)][int]$Port = 3080,
+  [ValidatePattern('^[A-Za-z0-9._-]+$')][string]$Profile = "web",
+  [switch]$NoBrowser
+)
+
+$ErrorActionPreference = "Stop"
+$ProgressPreference = "SilentlyContinue"
+
+function Resolve-NodePath {
+  $node = Get-Command node.exe -ErrorAction SilentlyContinue
+  if ($null -ne $node) { return $node.Source }
+  $candidates = @(
+    (Join-Path $env:ProgramFiles "nodejs\node.exe"),
+    (Join-Path ${env:ProgramFiles(x86)} "nodejs\node.exe")
+  ) | Where-Object { $_ -and (Test-Path $_) }
+  if ($candidates.Count -gt 0) { return $candidates[0] }
+  throw "Node.js was not found. Install Node.js 20+ and reopen PowerShell."
+}
+
+function Wait-LocalPort {
+  param([int]$PortNumber, [int]$ProcessId, [int]$TimeoutSeconds = 30)
+  $deadline = [DateTime]::UtcNow.AddSeconds($TimeoutSeconds)
+  while ([DateTime]::UtcNow -lt $deadline) {
+    $process = Get-Process -Id $ProcessId -ErrorAction SilentlyContinue
+    if ($null -eq $process) { throw "DeepSeek Harness exited before port $PortNumber became ready." }
+    $client = [Net.Sockets.TcpClient]::new()
+    try {
+      $task = $client.ConnectAsync("127.0.0.1", $PortNumber)
+      if ($task.Wait(250) -and $client.Connected) { return }
+    } finally {
+      $client.Dispose()
+    }
+    Start-Sleep -Milliseconds 250
+  }
+  throw "DeepSeek Harness did not open 127.0.0.1:$PortNumber within $TimeoutSeconds seconds."
+}
+
+$runtime = (Resolve-Path -LiteralPath $DshRuntime -ErrorAction Stop).Path
+$dshBin = Join-Path $runtime "node_modules\@deepseek-ai\dsh\lib\bin.js"
+if (-not (Test-Path -LiteralPath $dshBin -PathType Leaf)) {
+  throw "Cannot find $dshBin. Install @deepseek-ai/dsh in the runtime directory first."
+}
+
+$node = Resolve-NodePath
+$logDirectory = Join-Path $env:LOCALAPPDATA "DeepSeek Harness\logs"
+$stdoutLog = Join-Path $logDirectory "dsh-web.stdout.log"
+$stderrLog = Join-Path $logDirectory "dsh-web.stderr.log"
+New-Item -ItemType Directory -Force -Path $logDirectory | Out-Null
+
+if ($Profile -eq "web") {
+  $arguments = @('"' + $dshBin + '"', "web", "--port", "$Port")
+} else {
+  $arguments = @('"' + $dshBin + '"', "--profile", $Profile, "--port", "$Port")
+}
+
+Write-Host "Starting DeepSeek Harness profile '$Profile' on http://127.0.0.1:$Port"
+Write-Host "Runtime: $runtime"
+Write-Host "Logs: $logDirectory"
+$process = Start-Process -FilePath $node -ArgumentList $arguments -WorkingDirectory $runtime `
+  -RedirectStandardOutput $stdoutLog -RedirectStandardError $stderrLog `
+  -WindowStyle Hidden -PassThru
+
+try {
+  Wait-LocalPort -PortNumber $Port -ProcessId $process.Id
+  if (-not $NoBrowser) {
+    Start-Process "http://127.0.0.1:$Port"
+  }
+  Write-Host "DeepSeek Harness is ready. Press Ctrl+C to stop this launcher."
+  Wait-Process -Id $process.Id
+} finally {
+  $running = Get-Process -Id $process.Id -ErrorAction SilentlyContinue
+  if ($null -ne $running) {
+    Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue
+  }
+}

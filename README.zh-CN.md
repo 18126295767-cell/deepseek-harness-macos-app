@@ -15,11 +15,13 @@
 - 一个可快速本地试用的 Apple Silicon `DeepSeekHarness.app` 预构建版本。
 - 仅允许访问本地 Harness 地址（`127.0.0.1` / `localhost`）的 WebKit 视图。
 - 按需启动本地 DSH 进程的 LaunchAgent 配置模板。
+- Windows 配套启动器，以及便携 ZIP 和 NSIS 发布目标。
 - 中文 macOS 菜单、启动状态和错误提示。
 - App 图标源文件和可复现构建脚本。
 
 不包含：DeepSeek API 密钥、个人电话号码或邮箱、npm 依赖、用户会话、日志、私有
-设置，也不包含之前的独立插件集合。请自行安装和配置 DSH 运行时。
+设置，也不包含之前的独立插件集合。请自行安装和配置 DSH 运行时。Windows 配套包只是
+官方 Web runtime 的启动器，不是 macOS 专用原生控制插件的 Windows 移植版。
 
 ## 构建与安装
 
@@ -49,6 +51,17 @@ zsh ./build-app.sh --dsh-runtime /绝对路径/dsh-runtime
 
 完整步骤见 [中文可复现构建教程](TUTORIAL.zh-CN.md)，英文教程见
 [TUTORIAL.md](TUTORIAL.md)。
+
+## Windows 配套环境
+
+Windows 10/11 x64 通过 `windows/` 配套包支持。它启动 `@deepseek-ai/dsh` 并打开本地
+Web UI，不宣称在 Windows 上提供 macOS 的 Automation/Accessibility 工具。在 Windows
+构建机上先运行 `windows/bootstrap-build-environment.ps1`，再用
+`windows/build-release.ps1` 生成便携 ZIP、NSIS 当前用户安装包和 SHA-256 校验文件。
+GitHub Actions 会在真实的 `windows-2025` runner 上运行同样的构建并上传产物。
+
+安装 Release 前请阅读 [Windows 指南](windows/README.zh-CN.md)，英文说明见
+[Windows guide](windows/README.md)。
 
 ## 运行行为
 

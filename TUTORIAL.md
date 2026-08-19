@@ -80,6 +80,51 @@ The app should connect only to `http://127.0.0.1:3080/`. External links should
 open in the system browser. If the local service is not ready, the app shows a
 Chinese startup status and retries before presenting the log location.
 
+## 6. Windows companion setup
+
+The Windows package is a separate launcher for the official DSH Web runtime. It
+does not include the runtime or credentials, and it does not make the
+macOS-only `dsh-mac-control` tools available on Windows. Requirements are
+Windows 10/11 x64, PowerShell 5.1 or 7, and `winget` for the bootstrap script.
+
+From a checkout, prepare a Windows build machine:
+
+```powershell
+Set-Location windows
+& .\bootstrap-build-environment.ps1
+```
+
+The script installs Git, Node.js LTS, and NSIS through `winget`, then creates a
+separate `$HOME\dsh-runtime` with `@deepseek-ai/dsh@0.1.0-rc.7`. Review the
+commit-pinned plugin command in the main repository tutorial before adding any
+plugin to the Windows `web` profile. Reopen PowerShell after an installer
+changes `PATH`.
+
+Build the release artifacts on Windows:
+
+```powershell
+& .\build-release.ps1 -Version 0.1.0
+```
+
+The output contains `DeepSeek-Harness-Windows-x64-v0.1.0.zip`,
+`DeepSeek-Harness-Setup-v0.1.0-x64.exe`, and a `.sha256` manifest. The NSIS
+installer is per-user and does not require administrator rights. The portable
+archive contains `launch-dsh.cmd`, `launch-dsh.ps1`, install/uninstall scripts,
+the two Windows guides, and the MIT license.
+
+Start the installed launcher with:
+
+```powershell
+& "$env:LOCALAPPDATA\DeepSeek Harness\launch-dsh.ps1" `
+  -DshRuntime "$HOME\dsh-runtime" -Port 3080
+```
+
+It waits for `127.0.0.1:3080`, opens the default browser, writes logs to
+`%LOCALAPPDATA%\DeepSeek Harness\logs`, and stops the child DSH process when
+the launcher exits. Use `-NoBrowser` for headless startup. GitHub Actions uses
+the same `windows/build-release.ps1` on a `windows-2025` runner and uploads the
+ZIP, installer, and hash file.
+
 ## Troubleshooting
 
 If startup fails, inspect the log and validate the runtime path:
@@ -93,3 +138,8 @@ test -f /absolute/path/to/dsh-runtime/node_modules/@deepseek-ai/dsh/lib/bin.js
 If port 3080 is occupied, stop the conflicting local service or adapt the App
 shell and LaunchAgent together. Do not hard-code another user's path into a
 public commit.
+
+For Windows, inspect `%LOCALAPPDATA%\DeepSeek Harness\logs`, verify that
+`node_modules\@deepseek-ai\dsh\lib\bin.js` exists under the runtime directory,
+and confirm that NSIS is installed when an installer build fails. Do not copy
+the macOS LaunchAgent or `osascript` commands into Windows scripts.

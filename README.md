@@ -16,12 +16,15 @@ does not open the Harness as a normal web page.
 - A prebuilt Apple Silicon `DeepSeekHarness.app` for quick local testing.
 - WebKit view restricted to the local Harness origin (`127.0.0.1` / `localhost`).
 - LaunchAgent helper that starts the local DSH process on demand.
+- A Windows companion launcher with portable ZIP and NSIS release targets.
 - Chinese macOS menus and startup/error states.
 - App icon source files and a reproducible build script.
 
 Not included: DeepSeek API keys, personal phone or email information, npm
 dependencies, user sessions, logs, private settings, or the separate plugin
-collection. Install and configure the DSH runtime yourself.
+collection. Install and configure the DSH runtime yourself. The Windows
+companion is a launcher for the official Web runtime, not a Windows port of
+the macOS-only native control plugin.
 
 ## Build and install
 
@@ -54,6 +57,19 @@ being preserved by a web upload.
 
 See [TUTORIAL.md](TUTORIAL.md) for a complete reproducible setup and
 [TUTORIAL.zh-CN.md](TUTORIAL.zh-CN.md) for the Chinese guide.
+
+## Windows companion
+
+Windows 10/11 x64 is supported through the `windows/` companion package. It
+starts `@deepseek-ai/dsh` and opens the local Web UI; it does not claim to
+provide macOS Automation/Accessibility tools on Windows. Prepare a Windows
+machine with `windows/bootstrap-build-environment.ps1`, then build a portable
+ZIP, an NSIS per-user installer, and SHA-256 manifest with
+`windows/build-release.ps1`. The GitHub Actions workflow runs on a real
+`windows-2025` runner and uploads the same artifacts.
+
+Read the [Windows guide](windows/README.md) or
+[中文 Windows 指南](windows/README.zh-CN.md) before installing a release.
 
 ## Runtime behavior
 

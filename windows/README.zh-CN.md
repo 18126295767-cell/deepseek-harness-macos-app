@@ -1,0 +1,71 @@
+# DeepSeek Harness Windows 启动器
+
+这是独立 DeepSeek Harness macOS 外壳的 Windows 配套包。它启动官方 `@deepseek-ai/dsh` Web runtime，并在默认浏览器打开 `http://127.0.0.1:<port>`。它不是 DeepSeek 官方桌面应用，也不包含 DSH runtime、API Key、profile、浏览器会话或仅适用于 macOS 的 `dsh-mac-control` 插件。
+
+## 环境要求
+
+- Windows 10 或 Windows 11 x64
+- Node.js 20 或更高版本
+- 一个包含 `node_modules\@deepseek-ai\dsh\lib\bin.js` 的本地 DSH runtime
+- PowerShell 5.1 或 PowerShell 7
+
+## 安装
+
+执行 `install.ps1` 可进行当前用户安装，也可以使用 GitHub Release 中经过审阅的 NSIS 安装包。如果 Windows 阻止下载的脚本，可执行 `Unblock-File .\install.ps1`，或只对当前 PowerShell 窗口设置 `Set-ExecutionPolicy -Scope Process Bypass`。当前工作流不会对可执行文件进行代码签名；运行前请核对发布的 SHA-256 文件。安装器只写入 `%LOCALAPPDATA%\DeepSeek Harness` 并创建开始菜单快捷方式，不要求管理员权限。
+
+要一次性准备 Windows 构建环境并安装官方 runtime，请在 PowerShell 中执行：
+
+```powershell
+Set-Location windows
+& .\bootstrap-build-environment.ps1
+```
+
+该脚本通过 `winget` 安装 Git、Node.js LTS 和 NSIS。如果 Windows 尚未刷新 `PATH`，请重新打开 PowerShell。若 runtime 由其他方式管理，可使用 `-SkipDshRuntime`。脚本不会安装凭据或 profile。
+
+## 配置官方 runtime
+
+在 PowerShell 中执行：
+
+```powershell
+New-Item -ItemType Directory -Force "$HOME\dsh-runtime" | Out-Null
+Set-Location "$HOME\dsh-runtime"
+npm init -y
+npm install @deepseek-ai/dsh@0.1.0-rc.7
+node node_modules\@deepseek-ai\dsh\lib\bin.js web --port 3080
+```
+
+将本仓库插件加入 DSH `web` profile 的提交固定命令见主教程。插件的浏览器和桌面工具目前是 macOS 专用；Windows 上请使用官方 DSH Web 界面，以及你另外审阅过的 Windows 原生工具。
+
+## 启动
+
+```powershell
+& "$env:LOCALAPPDATA\DeepSeek Harness\launch-dsh.ps1" -DshRuntime "$HOME\dsh-runtime" -Port 3080
+```
+
+启动器会等待本机端口就绪、打开浏览器，把日志写入 `%LOCALAPPDATA%\DeepSeek Harness\logs`，并在启动器退出时停止子 runtime。无头启动使用 `-NoBrowser`；只有在已明确安装并审计 profile 后才使用 `-Profile ultimate`。
+
+## 构建发布包
+
+在安装 NSIS 的 Windows 环境中执行：
+
+```powershell
+Set-Location windows
+& .\build-release.ps1 -Version 0.1.0
+```
+
+这会生成便携 ZIP、NSIS 当前用户安装包和 SHA-256 校验文件。GitHub Actions 会在 `windows-2025` runner 上执行同样的构建。
+
+运行下载的产物前，请将它的哈希与对应 `.sha256` 文件中的行比较：
+
+```powershell
+Get-FileHash .\DeepSeek-Harness-Setup-v0.1.0-x64.exe -Algorithm SHA256
+Get-Content .\DeepSeek-Harness-Windows-x64-v0.1.0.sha256
+```
+
+## 卸载
+
+```powershell
+& "$env:LOCALAPPDATA\DeepSeek Harness\uninstall.ps1"
+```
+
+该脚本只删除启动器和快捷方式，不会删除单独管理的 DSH runtime 或 profile。
