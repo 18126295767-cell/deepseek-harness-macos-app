@@ -1,0 +1,16 @@
+DeepSeek Harness macOS App
+Copyright (c) 2026 DeepSeek Harness macOS App contributors
+
+This repository contains an independent native macOS shell for the open-source
+DeepSeek Harness project by DeepSeek AI:
+https://github.com/deepseek-ai/deepseek-harness
+
+The app shell is not affiliated with, sponsored by, endorsed by, or an official
+product of DeepSeek AI. "DeepSeek" and "DeepSeek Harness" are used only to
+identify the upstream compatibility target and may be trademarks of their
+respective owners.
+
+The upstream DeepSeek Harness project is MIT-licensed. The upstream project
+and its own notices remain authoritative for the bundled DSH runtime; this
+repository does not redistribute npm dependencies, API keys, plugins, user
+data, logs, or private configuration.
