@@ -29,7 +29,7 @@
 版本，以及本地 DeepSeek Harness 运行时。
 
 ```bash
-zsh ./build-app.sh \
+zsh ./scripts/build-app.sh \
   --dsh-runtime /绝对路径/dsh-runtime \
   --install
 ```
@@ -41,13 +41,12 @@ zsh ./build-app.sh \
 仅构建不安装：
 
 ```bash
-zsh ./build-app.sh --dsh-runtime /绝对路径/dsh-runtime
+zsh ./scripts/build-app.sh --dsh-runtime /绝对路径/dsh-runtime
 ```
 
-脚本同时兼容标准源码目录与 GitHub 网页上传形成的扁平目录。本公开仓库采用根目录扁平
-结构：请将 `build-app.sh`、`main.swift`、`Info.plist`、`icon-source.svg`、
-`DeepSeekHarness.icns` 和 `com.houxinran.deepseek-harness.plist.template` 保持在仓库
-根目录。使用 `zsh` 调用脚本，可以避免 GitHub 网页上传未保留可执行权限时构建失败。
+本公开仓库采用标准源码目录：构建入口为 `scripts/build-app.sh`，Swift 源码位于
+`App/DeepSeekHarnessApp`，LaunchAgent 模板位于 `packaging`。脚本仍兼容旧的扁平
+导出布局。使用 `zsh` 调用，可以避免下载源码归档未保留可执行位时构建失败。
 
 完整步骤见 [中文可复现构建教程](TUTORIAL.zh-CN.md)，英文教程见
 [TUTORIAL.md](TUTORIAL.md)。

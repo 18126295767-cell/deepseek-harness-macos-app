@@ -31,11 +31,10 @@ test -f node_modules/@deepseek-ai/dsh/lib/bin.js
 
 ## 3. 构建
 
-本公开仓库采用 GitHub 网页上传形成的根目录扁平结构。请把构建脚本、Swift 源码、
-plist、图标和 LaunchAgent 模板保持在仓库根目录，并在该目录执行：
+本公开仓库采用标准嵌套源码目录。在仓库根目录执行：
 
 ```bash
-zsh ./build-app.sh \
+zsh ./scripts/build-app.sh \
   --dsh-runtime /绝对路径/dsh-runtime \
   --output ./build
 ```
@@ -43,13 +42,13 @@ zsh ./build-app.sh \
 输出为 `build/DeepSeekHarness.app`。脚本会编译 `main.swift`、复制 plist 和图标，不会
 修改 DSH 运行时。
 
-通过 `zsh` 调用脚本，不依赖 GitHub 网页上传可能未保留的可执行权限。同一脚本也能
-自动识别本地开发所用的标准嵌套源码目录。
+通过 `zsh` 调用脚本，不依赖源码归档可能未保留的可执行位。同一脚本仍会
+自动识别旧的扁平导出布局，以保持向后兼容。
 
 ## 4. 安装和启动
 
 ```bash
-zsh ./build-app.sh \
+zsh ./scripts/build-app.sh \
   --dsh-runtime /绝对路径/dsh-runtime \
   --install
 open "$HOME/Applications/DeepSeek Harness.app"

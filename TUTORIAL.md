@@ -33,12 +33,11 @@ credentials in this repository, a commit, a screenshot, or an issue report.
 
 ## 3. Build
 
-This published repository uses a flat root layout created by GitHub's web
-uploader. Keep the build script, Swift source, plist, icon, and LaunchAgent
-template together at the repository root. From that root, run:
+This repository uses a standard nested source tree. From the repository root,
+run:
 
 ```bash
-zsh ./build-app.sh \
+zsh ./scripts/build-app.sh \
   --dsh-runtime /absolute/path/to/dsh-runtime \
   --output ./build
 ```
@@ -47,13 +46,13 @@ The output is `build/DeepSeekHarness.app`. The script compiles `main.swift`,
 copies the plist and icon, and does not modify the DSH runtime.
 
 Calling the script through `zsh` avoids relying on the executable bit, which a
-GitHub web upload may not preserve. The same script also detects the standard
-nested source layout used by local development checkouts.
+source archive may not preserve. The same script still detects the old flat
+export layout for backward compatibility.
 
 ## 4. Install and launch
 
 ```bash
-zsh ./build-app.sh \
+zsh ./scripts/build-app.sh \
   --dsh-runtime /absolute/path/to/dsh-runtime \
   --install
 open "$HOME/Applications/DeepSeek Harness.app"

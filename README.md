@@ -32,7 +32,7 @@ Requirements: Apple Silicon macOS 12 or newer, Xcode Command Line Tools, Node.js
 22 or newer, and a local DeepSeek Harness installation.
 
 ```bash
-zsh ./build-app.sh \
+zsh ./scripts/build-app.sh \
   --dsh-runtime /absolute/path/to/dsh-runtime \
   --install
 ```
@@ -44,16 +44,14 @@ per-user LaunchAgent with your actual runtime paths, and installs the app under
 To build without installing:
 
 ```bash
-zsh ./build-app.sh --dsh-runtime /absolute/path/to/dsh-runtime
+zsh ./scripts/build-app.sh --dsh-runtime /absolute/path/to/dsh-runtime
 ```
 
-The script accepts both the standard source-tree checkout and the flat layout
-created by GitHub's web uploader. This published repository uses the flat root
-layout: keep `build-app.sh`, `main.swift`, `Info.plist`, `icon-source.svg`,
-`DeepSeekHarness.icns`, and
-`com.houxinran.deepseek-harness.plist.template` together at the repository root.
-Run the script with `zsh` so the build does not depend on the executable bit
-being preserved by a web upload.
+The published repository uses the standard source tree: the build entry point
+is `scripts/build-app.sh`, Swift sources are under `App/DeepSeekHarnessApp`, and
+the LaunchAgent template is under `packaging`. The script also accepts the old
+flat export layout for backward compatibility. Run it with `zsh` so the build
+does not depend on an executable bit being preserved by an archive download.
 
 See [TUTORIAL.md](TUTORIAL.md) for a complete reproducible setup and
 [TUTORIAL.zh-CN.md](TUTORIAL.zh-CN.md) for the Chinese guide.
