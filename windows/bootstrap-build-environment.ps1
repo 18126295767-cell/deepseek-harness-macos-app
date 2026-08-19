@@ -6,6 +6,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
+Set-StrictMode -Version Latest
 
 if ([Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT) {
   throw "This bootstrap script must run on Windows 10 or Windows 11."
@@ -34,6 +35,11 @@ $nsisCandidates = @(
 if ($nsisCandidates.Count -eq 0) { throw "NSIS installation did not provide makensis.exe." }
 
 $env:Path = "$(Split-Path $nsisCandidates[0]);$env:Path"
+$nodeDirectory = Join-Path $env:ProgramFiles "nodejs"
+$gitDirectory = Join-Path $env:ProgramFiles "Git\cmd"
+foreach ($directory in @($nodeDirectory, $gitDirectory)) {
+  if (Test-Path $directory) { $env:Path = "$directory;$env:Path" }
+}
 if (-not (Get-Command node.exe -ErrorAction SilentlyContinue)) {
   throw "Node.js was installed but is not visible in this PowerShell session. Reopen PowerShell and rerun."
 }

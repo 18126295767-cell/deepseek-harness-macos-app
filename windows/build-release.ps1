@@ -5,6 +5,7 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+Set-StrictMode -Version Latest
 if ([Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT) {
   throw "This release script must run on Windows."
 }
@@ -32,9 +33,10 @@ $zip = Join-Path $output "DeepSeek-Harness-Windows-x64-v$Version.zip"
 if (Test-Path $zip) { Remove-Item -LiteralPath $zip -Force }
 Compress-Archive -Path (Join-Path $stage "*") -DestinationPath $zip -CompressionLevel Optimal
 
-$zipCheck = Join-Path $env:TEMP ("dsh-app-zip-" + [guid]::NewGuid().ToString("N"))
+$zipTestDirectory = Join-Path $output ".zip-test-$Version"
+if (Test-Path $zipTestDirectory) { Remove-Item -LiteralPath $zipTestDirectory -Recurse -Force }
 try {
-  Expand-Archive -LiteralPath $zip -DestinationPath $zipCheck
+  Expand-Archive -LiteralPath $zip -DestinationPath $zipTestDirectory
   foreach ($required in @(
     "launch-dsh.ps1",
     "launch-dsh.cmd",
@@ -42,14 +44,15 @@ try {
     "uninstall.ps1",
     "README.md",
     "README.zh-CN.md",
+    "bootstrap-build-environment.ps1",
     "LICENSE"
   )) {
-    if (-not (Test-Path -LiteralPath (Join-Path $zipCheck $required))) {
-      throw "The portable archive is missing $required."
+    if (-not (Test-Path (Join-Path $zipTestDirectory $required) -PathType Leaf)) {
+      throw "Portable ZIP is missing $required."
     }
   }
 } finally {
-  if (Test-Path -LiteralPath $zipCheck) { Remove-Item -LiteralPath $zipCheck -Recurse -Force }
+  if (Test-Path $zipTestDirectory) { Remove-Item -LiteralPath $zipTestDirectory -Recurse -Force }
 }
 
 $makensis = Get-Command makensis.exe -ErrorAction SilentlyContinue
@@ -66,11 +69,26 @@ $installer = Join-Path $output "DeepSeek-Harness-Setup-v$Version-x64.exe"
 if (Test-Path $installer) { Remove-Item -LiteralPath $installer -Force }
 & $makensis.Source "/DVERSION=$Version" "/DSTAGE_DIR=$stage" "/DOUT_FILE=$installer" (Join-Path $PSScriptRoot "installer.nsi")
 if (-not (Test-Path $installer)) { throw "NSIS installer was not produced." }
+$installerHeader = [IO.File]::ReadAllBytes($installer)[0..1]
+if ($installerHeader[0] -ne 0x4d -or $installerHeader[1] -ne 0x5a) {
+  throw "NSIS installer does not have a valid Windows MZ executable header."
+}
 
 $hashFile = Join-Path $output "DeepSeek-Harness-Windows-x64-v$Version.sha256"
 @($zip, $installer) | ForEach-Object {
   "{0}  {1}" -f (Get-FileHash -Algorithm SHA256 -LiteralPath $_).Hash.ToLowerInvariant(), ([IO.Path]::GetFileName($_))
 } | Set-Content -LiteralPath $hashFile -Encoding ascii
+
+$manifestEntries = @{}
+foreach ($line in Get-Content -LiteralPath $hashFile) {
+  if ($line -notmatch '^([a-f0-9]{64})  (.+)$') { throw "Invalid SHA-256 manifest line: $line" }
+  $manifestEntries[$Matches[2]] = $Matches[1]
+}
+foreach ($artifact in @($zip, $installer)) {
+  $name = [IO.Path]::GetFileName($artifact)
+  $actual = (Get-FileHash -Algorithm SHA256 -LiteralPath $artifact).Hash.ToLowerInvariant()
+  if ($manifestEntries[$name] -ne $actual) { throw "SHA-256 verification failed for $name." }
+}
 
 Remove-Item -LiteralPath $stage -Recurse -Force
 

@@ -8,6 +8,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
+Set-StrictMode -Version Latest
 
 function Resolve-NodePath {
   $node = Get-Command node.exe -ErrorAction SilentlyContinue
@@ -38,6 +39,18 @@ function Wait-LocalPort {
   throw "DeepSeek Harness did not open 127.0.0.1:$PortNumber within $TimeoutSeconds seconds."
 }
 
+function Assert-LocalPortAvailable {
+  param([int]$PortNumber)
+  $listener = [Net.Sockets.TcpListener]::new([Net.IPAddress]::Loopback, $PortNumber)
+  try {
+    $listener.Start()
+  } catch {
+    throw "Cannot start DeepSeek Harness because 127.0.0.1:$PortNumber is already in use."
+  } finally {
+    $listener.Stop()
+  }
+}
+
 $runtime = (Resolve-Path -LiteralPath $DshRuntime -ErrorAction Stop).Path
 $dshBin = Join-Path $runtime "node_modules\@deepseek-ai\dsh\lib\bin.js"
 if (-not (Test-Path -LiteralPath $dshBin -PathType Leaf)) {
@@ -46,9 +59,10 @@ if (-not (Test-Path -LiteralPath $dshBin -PathType Leaf)) {
 
 $node = Resolve-NodePath
 $logDirectory = Join-Path $env:LOCALAPPDATA "DeepSeek Harness\logs"
-$stdoutLog = Join-Path $logDirectory "dsh-web.stdout.log"
-$stderrLog = Join-Path $logDirectory "dsh-web.stderr.log"
+$stdoutLog = Join-Path $logDirectory "dsh-web-$Port.stdout.log"
+$stderrLog = Join-Path $logDirectory "dsh-web-$Port.stderr.log"
 New-Item -ItemType Directory -Force -Path $logDirectory | Out-Null
+Assert-LocalPortAvailable -PortNumber $Port
 
 if ($Profile -eq "web") {
   $arguments = @('"' + $dshBin + '"', "web", "--port", "$Port")

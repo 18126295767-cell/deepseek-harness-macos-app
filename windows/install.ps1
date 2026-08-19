@@ -4,17 +4,30 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$source = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
+Set-StrictMode -Version Latest
+$sourceDirectories = @(
+  (Resolve-Path $PSScriptRoot).Path,
+  (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
+)
 $target = [IO.Path]::GetFullPath($InstallDirectory)
-if ($target.TrimEnd('\') -eq $source.TrimEnd('\')) {
+if ($sourceDirectories | Where-Object { $target.TrimEnd('\') -eq $_.TrimEnd('\') }) {
   throw "InstallDirectory must not be the source directory."
+}
+if ($target.TrimEnd('\') -eq [IO.Path]::GetPathRoot($target).TrimEnd('\')) {
+  throw "InstallDirectory must not be a drive root."
 }
 
 New-Item -ItemType Directory -Force -Path $target | Out-Null
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot "launch-dsh.ps1") -Destination $target -Force
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot "launch-dsh.cmd") -Destination $target -Force
-Copy-Item -LiteralPath (Join-Path $PSScriptRoot "README.md") -Destination $target -Force -ErrorAction SilentlyContinue
-Copy-Item -LiteralPath (Join-Path $PSScriptRoot "README.zh-CN.md") -Destination $target -Force -ErrorAction SilentlyContinue
+Copy-Item -LiteralPath (Join-Path $PSScriptRoot "uninstall.ps1") -Destination $target -Force
+Copy-Item -LiteralPath (Join-Path $PSScriptRoot "README.md") -Destination $target -Force
+Copy-Item -LiteralPath (Join-Path $PSScriptRoot "README.zh-CN.md") -Destination $target -Force
+$licenseSource = Join-Path $PSScriptRoot "LICENSE"
+if (-not (Test-Path $licenseSource -PathType Leaf)) {
+  $licenseSource = Join-Path (Resolve-Path (Join-Path $PSScriptRoot "..")).Path "LICENSE"
+}
+Copy-Item -LiteralPath $licenseSource -Destination $target -Force
 
 $startMenu = Join-Path $env:APPDATA "Microsoft\Windows\Start Menu\Programs\DeepSeek Harness"
 New-Item -ItemType Directory -Force -Path $startMenu | Out-Null
