@@ -21,8 +21,7 @@ New-Item -ItemType Directory -Force -Path $target | Out-Null
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot "launch-dsh.ps1") -Destination $target -Force
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot "launch-dsh.cmd") -Destination $target -Force
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot "uninstall.ps1") -Destination $target -Force
-Copy-Item -LiteralPath (Join-Path $PSScriptRoot "README.md") -Destination $target -Force
-Copy-Item -LiteralPath (Join-Path $PSScriptRoot "README.zh-CN.md") -Destination $target -Force
+Get-ChildItem $PSScriptRoot -Filter "README*.md" -File | Copy-Item -Destination $target -Force
 $licenseSource = Join-Path $PSScriptRoot "LICENSE"
 if (-not (Test-Path $licenseSource -PathType Leaf)) {
   $licenseSource = Join-Path (Resolve-Path (Join-Path $PSScriptRoot "..")).Path "LICENSE"

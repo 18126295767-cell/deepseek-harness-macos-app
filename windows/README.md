@@ -1,11 +1,13 @@
 # DeepSeek Harness Windows Launcher
 
+**Language:** [简体中文](README.zh-CN.md) · English · [日本語](README.ja.md) · [한국어](README.ko.md) · [Español](README.es.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · [Português](README.pt-BR.md) · [Русский](README.ru.md) · [العربية](README.ar.md) · [हिन्दी](README.hi.md) · [繁體中文](README.zh-TW.md)
+
 This is the Windows companion package for the independent DeepSeek Harness macOS shell. It starts the official `@deepseek-ai/dsh` Web runtime and opens `http://127.0.0.1:<port>` in the default browser. It is not an official DeepSeek desktop application and it does not include the DSH runtime, API keys, profiles, browser sessions, or the macOS-only `dsh-mac-control` plugin.
 
 ## Requirements
 
 - Windows 10 or Windows 11 x64
-- Node.js 20 or newer
+- Node.js 22 LTS recommended (20 or newer is supported by this launcher)
 - A local DSH runtime containing `node_modules\@deepseek-ai\dsh\lib\bin.js`
 - PowerShell 5.1 or PowerShell 7
 
@@ -30,7 +32,7 @@ From PowerShell:
 New-Item -ItemType Directory -Force "$HOME\dsh-runtime" | Out-Null
 Set-Location "$HOME\dsh-runtime"
 npm init -y
-npm install @deepseek-ai/dsh@0.1.0-rc.7
+npm install --save-exact @deepseek-ai/dsh@0.1.0-rc.7
 node node_modules\@deepseek-ai\dsh\lib\bin.js web --port 3080
 ```
 
@@ -42,7 +44,7 @@ Install this repository's plugin into the DSH `web` profile using the commit-pin
 & "$env:LOCALAPPDATA\DeepSeek Harness\launch-dsh.ps1" -DshRuntime "$HOME\dsh-runtime" -Port 3080
 ```
 
-The launcher waits for the local port, opens the browser, writes logs to `%LOCALAPPDATA%\DeepSeek Harness\logs`, and stops the child runtime when the launcher exits. Use `-NoBrowser` for headless startup and `-Profile ultimate` only when that profile has been explicitly installed and audited.
+The launcher refuses an occupied port, waits for the local port, opens the browser, writes port-specific logs to `%LOCALAPPDATA%\DeepSeek Harness\logs`, and stops the child runtime when the launcher exits. Use `-NoBrowser` for headless startup. A custom `-Profile` is valid only if its audited composition includes the official Web app and accepts `--port`; otherwise keep the default `web` profile.
 
 ## Build release artifacts
 
@@ -53,7 +55,7 @@ Set-Location windows
 & .\build-release.ps1 -Version 0.1.0
 ```
 
-This creates a portable ZIP, an NSIS per-user installer, and a SHA-256 file. The GitHub Actions workflow performs the same build on a `windows-2025` runner.
+This creates a portable ZIP, an NSIS per-user installer, and a SHA-256 file. It also verifies the ZIP contents, all 12 language guides, the installer's Windows executable header, and the hashes. The GitHub Actions workflow performs the same build on a real `windows-2025` runner, starts `@deepseek-ai/dsh@0.1.0-rc.7`, and requires HTTP 200 plus the official `window.__DSH_BOOT__` manifest before artifacts can be uploaded.
 
 Before running a downloaded artifact, compare its output with the matching
 line in the `.sha256` file:

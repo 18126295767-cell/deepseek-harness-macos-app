@@ -1,11 +1,13 @@
 # DeepSeek Harness Windows 启动器
 
+**语言：** 简体中文 · [English](README.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Español](README.es.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · [Português](README.pt-BR.md) · [Русский](README.ru.md) · [العربية](README.ar.md) · [हिन्दी](README.hi.md) · [繁體中文](README.zh-TW.md)
+
 这是独立 DeepSeek Harness macOS 外壳的 Windows 配套包。它启动官方 `@deepseek-ai/dsh` Web runtime，并在默认浏览器打开 `http://127.0.0.1:<port>`。它不是 DeepSeek 官方桌面应用，也不包含 DSH runtime、API Key、profile、浏览器会话或仅适用于 macOS 的 `dsh-mac-control` 插件。
 
 ## 环境要求
 
 - Windows 10 或 Windows 11 x64
-- Node.js 20 或更高版本
+- 推荐 Node.js 22 LTS（本启动器支持 20 或更高版本）
 - 一个包含 `node_modules\@deepseek-ai\dsh\lib\bin.js` 的本地 DSH runtime
 - PowerShell 5.1 或 PowerShell 7
 
@@ -30,7 +32,7 @@ Set-Location windows
 New-Item -ItemType Directory -Force "$HOME\dsh-runtime" | Out-Null
 Set-Location "$HOME\dsh-runtime"
 npm init -y
-npm install @deepseek-ai/dsh@0.1.0-rc.7
+npm install --save-exact @deepseek-ai/dsh@0.1.0-rc.7
 node node_modules\@deepseek-ai\dsh\lib\bin.js web --port 3080
 ```
 
@@ -42,7 +44,7 @@ node node_modules\@deepseek-ai\dsh\lib\bin.js web --port 3080
 & "$env:LOCALAPPDATA\DeepSeek Harness\launch-dsh.ps1" -DshRuntime "$HOME\dsh-runtime" -Port 3080
 ```
 
-启动器会等待本机端口就绪、打开浏览器，把日志写入 `%LOCALAPPDATA%\DeepSeek Harness\logs`，并在启动器退出时停止子 runtime。无头启动使用 `-NoBrowser`；只有在已明确安装并审计 profile 后才使用 `-Profile ultimate`。
+启动器会拒绝已被占用的端口，等待本机端口就绪后打开浏览器，把按端口区分的日志写入 `%LOCALAPPDATA%\DeepSeek Harness\logs`，并在启动器退出时停止子 runtime。无头启动使用 `-NoBrowser`。自定义 `-Profile` 只有在经审计的组合中包含官方 Web app 且接受 `--port` 时才有效，否则请保持默认 `web` profile。
 
 ## 构建发布包
 
@@ -53,7 +55,7 @@ Set-Location windows
 & .\build-release.ps1 -Version 0.1.0
 ```
 
-这会生成便携 ZIP、NSIS 当前用户安装包和 SHA-256 校验文件。GitHub Actions 会在 `windows-2025` runner 上执行同样的构建。
+这会生成便携 ZIP、NSIS 当前用户安装包和 SHA-256 校验文件，同时验证 ZIP 内容、12 种语言指南、安装器的 Windows 可执行文件头和哈希。GitHub Actions 会在真实 `windows-2025` runner 上执行同样的构建，启动 `@deepseek-ai/dsh@0.1.0-rc.7`，并且只有在 HTTP 200 与官方 `window.__DSH_BOOT__` 启动清单同时通过时才上传产物。
 
 运行下载的产物前，请将它的哈希与对应 `.sha256` 文件中的行比较：
 

@@ -69,6 +69,13 @@ ZIP, an NSIS per-user installer, and SHA-256 manifest with
 Read the [Windows guide](windows/README.md) or
 [中文 Windows 指南](windows/README.zh-CN.md) before installing a release.
 
+Windows guide languages: [日本語](windows/README.ja.md) ·
+[한국어](windows/README.ko.md) · [Español](windows/README.es.md) ·
+[Français](windows/README.fr.md) · [Deutsch](windows/README.de.md) ·
+[Português](windows/README.pt-BR.md) · [Русский](windows/README.ru.md) ·
+[العربية](windows/README.ar.md) · [हिन्दी](windows/README.hi.md) ·
+[繁體中文](windows/README.zh-TW.md).
+
 ## Runtime behavior
 
 The app connects to `http://127.0.0.1:3080/` only after the local service is

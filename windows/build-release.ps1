@@ -24,8 +24,7 @@ Copy-Item (Join-Path $PSScriptRoot "launch-dsh.ps1") $stage -Force
 Copy-Item (Join-Path $PSScriptRoot "launch-dsh.cmd") $stage -Force
 Copy-Item (Join-Path $PSScriptRoot "install.ps1") $stage -Force
 Copy-Item (Join-Path $PSScriptRoot "uninstall.ps1") $stage -Force
-Copy-Item (Join-Path $PSScriptRoot "README.md") $stage -Force
-Copy-Item (Join-Path $PSScriptRoot "README.zh-CN.md") $stage -Force
+Get-ChildItem $PSScriptRoot -Filter "README*.md" -File | Copy-Item -Destination $stage -Force
 Copy-Item (Join-Path $PSScriptRoot "bootstrap-build-environment.ps1") $stage -Force
 Copy-Item (Join-Path $repo "LICENSE") $stage -Force
 
@@ -51,6 +50,8 @@ try {
       throw "Portable ZIP is missing $required."
     }
   }
+  $guideCount = @(Get-ChildItem $zipTestDirectory -Filter "README*.md" -File).Count
+  if ($guideCount -lt 12) { throw "Portable ZIP contains only $guideCount language guides; expected at least 12." }
 } finally {
   if (Test-Path $zipTestDirectory) { Remove-Item -LiteralPath $zipTestDirectory -Recurse -Force }
 }

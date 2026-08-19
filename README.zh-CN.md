@@ -62,6 +62,13 @@ GitHub Actions 会在真实的 `windows-2025` runner 上运行同样的构建并
 安装 Release 前请阅读 [Windows 指南](windows/README.zh-CN.md)，英文说明见
 [Windows guide](windows/README.md)。
 
+Windows 指南语言：[日本語](windows/README.ja.md) ·
+[한국어](windows/README.ko.md) · [Español](windows/README.es.md) ·
+[Français](windows/README.fr.md) · [Deutsch](windows/README.de.md) ·
+[Português](windows/README.pt-BR.md) · [Русский](windows/README.ru.md) ·
+[العربية](windows/README.ar.md) · [हिन्दी](windows/README.hi.md) ·
+[繁體中文](windows/README.zh-TW.md)。
+
 ## 运行行为
 
 只有本地服务就绪后，App 才会连接 `http://127.0.0.1:3080/`。关闭 App 会请求终止关联的
