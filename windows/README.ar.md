@@ -80,3 +80,11 @@ Get-Content .\releases\DeepSeek-Harness-Windows-x64-v0.1.0.sha256
 يبقى DSH runtime وprofiles بدون حذف.
 
 </div>
+
+<div dir="rtl">
+
+## فحص سلامة profile
+
+قبل تشغيل DSH يقارن المشغّل profile المختار مع runtime الفعلي، ويمنع وجود نسخة مادية ثانية من حزم المضيف `@deepseek-ai/dsh-*`. يحدد التقرير الحزمة والإضافة التي جلبتها، لكنه لا يحذف أي ملف. بعد إصلاح الإضافة أعد إرسال المهمة في جلسة جديدة، لأن الجلسة القديمة قد تحتوي رسالة `tool_calls` غير مكتملة.
+
+</div>

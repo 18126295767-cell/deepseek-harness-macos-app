@@ -56,3 +56,10 @@ Get-Content .\releases\DeepSeek-Harness-Windows-x64-v0.1.0.sha256
 ```
 
 DSH runtime 與 profiles 會保留。
+
+## Profile 完整性檢查
+
+DSH 啟動前，啟動器會比對所選 profile 與實際 runtime，並阻止宿主
+`@deepseek-ai/dsh-*` 套件的第二個實體副本。報告會指出衝突套件與引入者，但不會刪除
+profile 檔案。修復外掛後，請在新工作階段重新送出中斷的工作，因為舊工作階段可能已
+儲存缺少對應工具結果的 `tool_calls` 訊息。

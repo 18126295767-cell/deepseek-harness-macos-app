@@ -206,6 +206,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, WKNa
                     timer.invalidate()
                     self.serviceStartRequested = false
                     self.loadHarness(forceReload: forceReload)
+                } else if self.profileIntegrityFailureDetected() {
+                    timer.invalidate()
+                    self.serviceStartRequested = false
+                    self.showProfileIntegrityFailure()
                 } else if self.retryCount >= 120 {
                     timer.invalidate()
                     self.serviceStartRequested = false
@@ -292,6 +296,27 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, WKNa
                 .appendingPathComponent("Library/Logs/DeepSeekHarness.log"))
         } else {
             ensureHarnessIsRunning(forceReload: true)
+        }
+    }
+
+    private func profileIntegrityFailureDetected() -> Bool {
+        FileManager.default.fileExists(atPath: FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent("Library/Logs/DeepSeekHarness.profile-error").path)
+    }
+
+    private func showProfileIntegrityFailure() {
+        statusLabel.stringValue = "检测到插件依赖冲突"
+        spinner.stopAnimation(nil)
+
+        let alert = NSAlert()
+        alert.alertStyle = .critical
+        alert.messageText = "DeepSeek Harness 已阻止不兼容的 profile 启动"
+        alert.informativeText = "某个插件安装了 DSH 核心包的第二个副本，可能导致工具调用中断。请打开日志查看冲突插件并升级或移除它；不要继续使用已损坏的旧会话，请新建会话重新发送任务。检查器没有删除任何文件。"
+        alert.addButton(withTitle: "打开诊断日志")
+        alert.addButton(withTitle: "关闭")
+        if alert.runModal() == .alertFirstButtonReturn {
+            NSWorkspace.shared.open(FileManager.default.homeDirectoryForCurrentUser
+                .appendingPathComponent("Library/Logs/DeepSeekHarness.log"))
         }
     }
 

@@ -9,6 +9,7 @@ on:
         default: "0.1.0"
   push:
     branches:
+      - "main"
       - "codex/windows-release-candidate"
     tags:
       - "windows-v*"
@@ -48,6 +49,10 @@ jobs:
             [System.Management.Automation.Language.Parser]::ParseFile($file.FullName, [ref]$tokens, [ref]$parseErrors) | Out-Null
             if ($parseErrors) { throw "PowerShell parse failed: $($file.Name)" }
           }
+
+      - name: Test profile integrity guard
+        shell: pwsh
+        run: node --test
 
       - name: Smoke test official DSH Web runtime
         shell: pwsh

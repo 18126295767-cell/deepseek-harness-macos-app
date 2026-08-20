@@ -58,6 +58,20 @@ if (-not (Test-Path -LiteralPath $dshBin -PathType Leaf)) {
 }
 
 $node = Resolve-NodePath
+$doctor = @(
+  (Join-Path $PSScriptRoot "profile-doctor.mjs"),
+  (Join-Path (Resolve-Path (Join-Path $PSScriptRoot "..")).Path "scripts\profile-doctor.mjs")
+) | Where-Object { Test-Path -LiteralPath $_ -PathType Leaf } | Select-Object -First 1
+if (-not $doctor) {
+  throw "The launcher is incomplete: profile-doctor.mjs is missing."
+}
+$dshHome = if ($env:DSH_HOME) { [IO.Path]::GetFullPath($env:DSH_HOME) } else { Join-Path $env:USERPROFILE ".dsh" }
+$profileDirectory = Join-Path $dshHome "profiles\$Profile"
+& $node $doctor --runtime $runtime --profile-dir $profileDirectory
+if ($LASTEXITCODE -ne 0) {
+  throw "DSH profile integrity check failed. Review the conflict report above; no files were deleted."
+}
+
 $logDirectory = Join-Path $env:LOCALAPPDATA "DeepSeek Harness\logs"
 $stdoutLog = Join-Path $logDirectory "dsh-web-$Port.stdout.log"
 $stderrLog = Join-Path $logDirectory "dsh-web-$Port.stderr.log"

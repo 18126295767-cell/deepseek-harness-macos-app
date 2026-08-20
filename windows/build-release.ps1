@@ -22,6 +22,7 @@ New-Item -ItemType Directory -Force -Path $stage | Out-Null
 
 Copy-Item (Join-Path $PSScriptRoot "launch-dsh.ps1") $stage -Force
 Copy-Item (Join-Path $PSScriptRoot "launch-dsh.cmd") $stage -Force
+Copy-Item (Join-Path $repo "scripts\profile-doctor.mjs") $stage -Force
 Copy-Item (Join-Path $PSScriptRoot "install.ps1") $stage -Force
 Copy-Item (Join-Path $PSScriptRoot "uninstall.ps1") $stage -Force
 Get-ChildItem $PSScriptRoot -Filter "README*.md" -File | Copy-Item -Destination $stage -Force
@@ -39,6 +40,7 @@ try {
   foreach ($required in @(
     "launch-dsh.ps1",
     "launch-dsh.cmd",
+    "profile-doctor.mjs",
     "install.ps1",
     "uninstall.ps1",
     "README.md",

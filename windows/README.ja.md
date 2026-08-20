@@ -56,3 +56,10 @@ Get-Content .\releases\DeepSeek-Harness-Windows-x64-v0.1.0.sha256
 ```
 
 DSH runtime と profile は削除されません。
+
+## Profile 整合性チェック
+
+DSH の起動前に、ランチャーは選択した profile と実際の runtime を比較し、ホストの
+`@deepseek-ai/dsh-*` パッケージの別の物理コピーをブロックします。レポートは競合する
+パッケージと導入元を示しますが、profile のファイルは削除しません。プラグイン修正後は、
+古いセッションに不完全な `tool_calls` が残り得るため、新しいセッションでタスクを再送してください。

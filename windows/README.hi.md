@@ -56,3 +56,11 @@ Get-Content .\releases\DeepSeek-Harness-Windows-x64-v0.1.0.sha256
 ```
 
 DSH runtime और profiles सुरक्षित रहते हैं।
+
+## Profile integrity जाँच
+
+DSH शुरू होने से पहले launcher चुने हुए profile की वास्तविक runtime से तुलना
+करता है और host `@deepseek-ai/dsh-*` package की दूसरी physical copy रोकता है।
+रिपोर्ट package और उसे लाने वाले plugin का नाम बताती है, पर कोई file नहीं मिटाती।
+Plugin ठीक करने के बाद task को नई session में फिर भेजें, क्योंकि पुरानी session में
+अधूरा `tool_calls` message रह सकता है।

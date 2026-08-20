@@ -72,3 +72,11 @@ Get-Content .\DeepSeek-Harness-Windows-x64-v0.1.0.sha256
 ```
 
 This removes the launcher and shortcut but leaves the separately managed DSH runtime and profile untouched.
+
+## Profile integrity guard
+
+Before DSH starts, the launcher compares the selected profile with the actual
+runtime and blocks any second physical copy of a host `@deepseek-ai/dsh-*`
+package. The report names the package and owner; it never deletes profile files.
+After fixing the plugin, resend an interrupted task in a new session because an
+old session may already contain an unmatched `tool_calls` message.

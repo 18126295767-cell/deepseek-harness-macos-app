@@ -56,3 +56,11 @@ La CI `windows-2025` lance réellement le runtime officiel et exige HTTP 200 ave
 ```
 
 Le runtime DSH et les profils sont conservés.
+
+## Contrôle d'intégrité du profil
+
+Avant de démarrer DSH, le lanceur compare le profil choisi au runtime réel et
+bloque toute seconde copie physique d'un paquet hôte `@deepseek-ai/dsh-*`.
+Le rapport indique le paquet et le plugin responsable sans supprimer de fichier.
+Après correction, renvoyez la tâche dans une nouvelle session, car l'ancienne
+peut déjà contenir un message `tool_calls` incomplet.

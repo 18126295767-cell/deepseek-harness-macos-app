@@ -7,6 +7,15 @@
   <key>ProgramArguments</key>
   <array>
     <string>__NODE_BIN__</string>
+    <string>__DOCTOR_SCRIPT__</string>
+    <string>--runtime</string>
+    <string>__DSH_RUNTIME__</string>
+    <string>--profile-dir</string>
+    <string>__PROFILE_DIR__</string>
+    <string>--error-marker</string>
+    <string>__ERROR_MARKER__</string>
+    <string>--exec</string>
+    <string>__NODE_BIN__</string>
     <string>__DSH_BIN__</string>
     <string>web</string>
     <string>--port</string>

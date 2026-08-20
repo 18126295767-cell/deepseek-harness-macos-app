@@ -15,6 +15,7 @@
 - 一个可快速本地试用的 Apple Silicon `DeepSeekHarness.app` 预构建版本。
 - 仅允许访问本地 Harness 地址（`127.0.0.1` / `localhost`）的 WebKit 视图。
 - 按需启动本地 DSH 进程的 LaunchAgent 配置模板。
+- 启动前检查 profile 的完整性，发现宿主 DSH 核心包的影子副本时安全停止。
 - Windows 配套启动器，以及便携 ZIP 和 NSIS 发布目标。
 - 中文 macOS 菜单、启动状态和错误提示。
 - App 图标源文件和可复现构建脚本。
@@ -73,6 +74,12 @@ Windows 指南语言：[日本語](windows/README.ja.md) ·
 
 只有本地服务就绪后，App 才会连接 `http://127.0.0.1:3080/`。关闭 App 会请求终止关联的
 LaunchAgent 进程。外部链接交给系统浏览器，Harness 界面始终留在原生窗口内。
+
+每次由 App 管理启动时，`profile-doctor.mjs` 都会把当前 profile 与实际 runtime 对照。
+只要插件另装了一份宿主 `@deepseek-ai/dsh-*` 核心包，即使版本号相同也会被阻止，因为
+Cordis 服务可能使用仅在当前物理副本中相同的 `Symbol`。检查器会指出冲突包和引入者，但
+绝不自动删除文件。如果旧会话已经写入 `tool_calls` 却没有对应工具结果，请保留它作为
+历史记录，并在新会话中重新发送任务，不要继续点击旧会话的“继续”。
 
 ## 上游归属与法律说明
 

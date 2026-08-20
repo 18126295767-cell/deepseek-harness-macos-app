@@ -47,11 +47,17 @@ swiftc -O -whole-module-optimization \
   "$source_dir/main.swift" \
   -o "$contents/MacOS/DeepSeekHarness"
 cp "$source_dir/Info.plist" "$contents/Info.plist"
-cp "$source_dir/icon-source.svg" "$output/icon-source.svg"
+if [[ "$source_dir/icon-source.svg" != "$output/icon-source.svg" ]]; then
+  cp "$source_dir/icon-source.svg" "$output/icon-source.svg"
+fi
+cp "$repo/scripts/profile-doctor.mjs" "$contents/Resources/profile-doctor.mjs"
 if [[ -f "$source_dir/DeepSeekHarness.app/Contents/Resources/DeepSeekHarness.icns" ]]; then
-  cp "$source_dir/DeepSeekHarness.app/Contents/Resources/DeepSeekHarness.icns" "$contents/Resources/DeepSeekHarness.icns"
+  icon_source="$source_dir/DeepSeekHarness.app/Contents/Resources/DeepSeekHarness.icns"
 else
-  cp "$source_dir/DeepSeekHarness.icns" "$contents/Resources/DeepSeekHarness.icns"
+  icon_source="$source_dir/DeepSeekHarness.icns"
+fi
+if [[ "$icon_source" != "$contents/Resources/DeepSeekHarness.icns" ]]; then
+  cp "$icon_source" "$contents/Resources/DeepSeekHarness.icns"
 fi
 
 if $install_app; then
@@ -63,8 +69,14 @@ if $install_app; then
   logs="$HOME/Library/Logs"
   mkdir -p "$launch_agents" "$logs"
   plist="$launch_agents/com.houxinran.deepseek-harness.plist"
+  doctor_script="$target_app/Contents/Resources/profile-doctor.mjs"
+  profile_dir="${DSH_HOME:-$HOME/.dsh}/profiles/web"
   sed -e "s|__NODE_BIN__|$node_bin|g" \
       -e "s|__DSH_BIN__|$runtime/node_modules/@deepseek-ai/dsh/lib/bin.js|g" \
+      -e "s|__DOCTOR_SCRIPT__|$doctor_script|g" \
+      -e "s|__DSH_RUNTIME__|$runtime|g" \
+      -e "s|__PROFILE_DIR__|$profile_dir|g" \
+      -e "s|__ERROR_MARKER__|$logs/DeepSeekHarness.profile-error|g" \
       -e "s|__WORKING_DIRECTORY__|$runtime|g" \
       -e "s|__LOG_PATH__|$logs/DeepSeekHarness.log|g" \
       "$template" > "$plist"

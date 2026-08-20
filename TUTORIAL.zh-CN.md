@@ -58,6 +58,17 @@ LaunchAgent 会生成到
 `~/Library/LaunchAgents/com.houxinran.deepseek-harness.plist`，日志位于
 `~/Library/Logs/DeepSeekHarness.log`。
 
+生成的 LaunchAgent 会在 DSH 启动前运行随 App 打包的 profile 检查器。也可以单独执行：
+
+```bash
+node scripts/profile-doctor.mjs \
+  --runtime /绝对路径/dsh-runtime \
+  --profile-dir "$HOME/.dsh/profiles/web"
+```
+
+不要通过删除检查器来掩盖冲突。应升级或移除报告中的插件，或者把该插件对 DSH 宿主
+核心包的声明从 `dependencies` 改为 `peerDependencies`。
+
 ## 5. 验证可复现性
 
 检查生成的 App 是 Apple Silicon 可执行文件，并确认 plist 有效：
@@ -112,6 +123,10 @@ Set-Location windows
 `-NoBrowser`。GitHub Actions 会在 `windows-2025` runner 上调用同一个
 `windows/build-release.ps1`，并上传 ZIP、安装器和哈希文件。
 
+Windows 启动器会在监听端口前，对 `%DSH_HOME%\profiles\<profile>`（未设置时为
+`%USERPROFILE%\.dsh\profiles\<profile>`）执行同一套物理副本检查。报告会指出冲突包和
+引入者，但不会改动 profile。
+
 ## 故障排查
 
 启动失败时检查日志和运行时路径：
@@ -128,3 +143,6 @@ test -f /绝对路径/dsh-runtime/node_modules/@deepseek-ai/dsh/lib/bin.js
 Windows 出错时检查 `%LOCALAPPDATA%\DeepSeek Harness\logs`，确认 runtime 目录中存在
 `node_modules\@deepseek-ai\dsh\lib\bin.js`，构建安装器失败时确认 NSIS 已安装。不要把
 macOS 的 LaunchAgent 或 `osascript` 命令复制到 Windows 脚本中。
+
+如果 profile 冲突后 API 报告 assistant `tool_calls` 后缺少工具消息，说明该会话已经保存
+了不完整回合。请保留它作为记录，待依赖检查通过后，在新会话中重新发送原任务。

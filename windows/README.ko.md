@@ -56,3 +56,10 @@ Get-Content .\releases\DeepSeek-Harness-Windows-x64-v0.1.0.sha256
 ```
 
 DSH runtime과 profile은 삭제되지 않습니다.
+
+## Profile 무결성 검사
+
+DSH를 시작하기 전에 런처가 선택한 profile과 실제 runtime을 비교하고 호스트
+`@deepseek-ai/dsh-*` 패키지의 두 번째 물리적 복사본을 차단합니다. 보고서는 충돌 패키지와
+이를 가져온 플러그인을 표시하지만 profile 파일은 삭제하지 않습니다. 플러그인을 수정한 뒤에는
+이전 세션에 불완전한 `tool_calls`가 남을 수 있으므로 새 세션에서 작업을 다시 보내십시오.

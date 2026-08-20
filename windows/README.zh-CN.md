@@ -71,3 +71,10 @@ Get-Content .\DeepSeek-Harness-Windows-x64-v0.1.0.sha256
 ```
 
 该脚本只删除启动器和快捷方式，不会删除单独管理的 DSH runtime 或 profile。
+
+## Profile 完整性检查
+
+DSH 启动前，启动器会将所选 profile 与实际 runtime 对照，并阻止宿主
+`@deepseek-ai/dsh-*` 包的第二个物理副本。报告会指出冲突包和引入者，但不会删除
+profile 文件。修复插件后，请在新会话中重新发送中断的任务，因为旧会话可能已经保存
+了没有对应工具结果的 `tool_calls` 消息。

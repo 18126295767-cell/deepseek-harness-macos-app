@@ -16,6 +16,7 @@ does not open the Harness as a normal web page.
 - A prebuilt Apple Silicon `DeepSeekHarness.app` for quick local testing.
 - WebKit view restricted to the local Harness origin (`127.0.0.1` / `localhost`).
 - LaunchAgent helper that starts the local DSH process on demand.
+- A fail-closed profile integrity guard that blocks shadow copies of host DSH core packages.
 - A Windows companion launcher with portable ZIP and NSIS release targets.
 - Chinese macOS menus and startup/error states.
 - App icon source files and a reproducible build script.
@@ -82,6 +83,14 @@ The app connects to `http://127.0.0.1:3080/` only after the local service is
 ready. Closing the app requests termination of the associated LaunchAgent
 process. External links are handed to the system browser, while the Harness UI
 stays inside the native window.
+
+Before every managed start, `profile-doctor.mjs` compares the selected profile
+with the actual runtime. A plugin-provided physical copy of a host
+`@deepseek-ai/dsh-*` package is rejected even when its version string matches,
+because Cordis services can use copy-local `Symbol` identities. The guard names
+the conflicting package and dependency owner, but never deletes files. If a
+previous crash already persisted an assistant `tool_calls` message without its
+tool result, keep that session as history and retry the task in a new session.
 
 ## Attribution and legal notice
 

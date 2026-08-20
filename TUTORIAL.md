@@ -62,6 +62,19 @@ The LaunchAgent is generated at
 `~/Library/LaunchAgents/com.houxinran.deepseek-harness.plist`; logs go to
 `~/Library/Logs/DeepSeekHarness.log`.
 
+The generated LaunchAgent runs the bundled profile doctor before DSH. You can
+run the same check without launching the app:
+
+```bash
+node scripts/profile-doctor.mjs \
+  --runtime /absolute/path/to/dsh-runtime \
+  --profile-dir "$HOME/.dsh/profiles/web"
+```
+
+Do not remove the guard to make a conflict disappear. Upgrade or remove the
+reported plugin, or fix that plugin so host core packages are in
+`peerDependencies` rather than `dependencies`.
+
 ## 5. Verify reproducibility
 
 Check that the generated app is an Apple Silicon executable and that its plist
@@ -124,6 +137,11 @@ the launcher exits. Use `-NoBrowser` for headless startup. GitHub Actions uses
 the same `windows/build-release.ps1` on a `windows-2025` runner and uploads the
 ZIP, installer, and hash file.
 
+The Windows launcher runs the same physical-copy check against
+`%DSH_HOME%\profiles\<profile>` (or `%USERPROFILE%\.dsh\profiles\<profile>`)
+before opening the port. It reports the package and owner and leaves the
+profile untouched.
+
 ## Troubleshooting
 
 If startup fails, inspect the log and validate the runtime path:
@@ -142,3 +160,8 @@ For Windows, inspect `%LOCALAPPDATA%\DeepSeek Harness\logs`, verify that
 `node_modules\@deepseek-ai\dsh\lib\bin.js` exists under the runtime directory,
 and confirm that NSIS is installed when an installer build fails. Do not copy
 the macOS LaunchAgent or `osascript` commands into Windows scripts.
+
+If the API reports that an assistant `tool_calls` message lacks following tool
+messages after a profile conflict, that session already contains an incomplete
+turn. Preserve it for reference and resend the task in a new session after the
+dependency check passes.

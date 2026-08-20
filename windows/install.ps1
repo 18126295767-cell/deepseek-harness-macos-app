@@ -20,6 +20,12 @@ if ($target.TrimEnd('\') -eq [IO.Path]::GetPathRoot($target).TrimEnd('\')) {
 New-Item -ItemType Directory -Force -Path $target | Out-Null
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot "launch-dsh.ps1") -Destination $target -Force
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot "launch-dsh.cmd") -Destination $target -Force
+$doctorSource = @(
+  (Join-Path $PSScriptRoot "profile-doctor.mjs"),
+  (Join-Path (Resolve-Path (Join-Path $PSScriptRoot "..")).Path "scripts\profile-doctor.mjs")
+) | Where-Object { Test-Path -LiteralPath $_ -PathType Leaf } | Select-Object -First 1
+if (-not $doctorSource) { throw "profile-doctor.mjs is missing." }
+Copy-Item -LiteralPath $doctorSource -Destination $target -Force
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot "uninstall.ps1") -Destination $target -Force
 Get-ChildItem $PSScriptRoot -Filter "README*.md" -File | Copy-Item -Destination $target -Force
 $licenseSource = Join-Path $PSScriptRoot "LICENSE"

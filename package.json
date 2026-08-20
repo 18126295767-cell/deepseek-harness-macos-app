@@ -1,0 +1,22 @@
+{
+  "name": "deepseek-harness-macos-app",
+  "version": "0.1.1",
+  "description": "Native macOS shell and guarded Windows launcher for a user-managed DeepSeek Harness runtime.",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/18126295767-cell/deepseek-harness-macos-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/18126295767-cell/deepseek-harness-macos-app/issues"
+  },
+  "homepage": "https://github.com/18126295767-cell/deepseek-harness-macos-app#readme",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test"
+  }
+}
