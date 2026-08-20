@@ -43,3 +43,11 @@ test('Windows executable discovery preserves complete fallback paths', () => {
     assert.doesNotMatch(source, /\$(?:nsisC|c)andidates(?:\.Count|\[0\])/);
   }
 });
+
+test('Windows verification summary closes its artifact loop', () => {
+  const workflow = fs.readFileSync(path.join(root, '.github', 'workflows', 'windows-release.yml'), 'utf8');
+  assert.match(
+    workflow,
+    /foreach \(\$artifact in \$artifacts\) \{[\s\S]*?GITHUB_STEP_SUMMARY[\s\S]*?^          \}$/m,
+  );
+});

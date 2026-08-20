@@ -189,6 +189,7 @@ jobs:
             $item = Get-Item $artifact
             $hash = (Get-FileHash -Algorithm SHA256 $artifact).Hash.ToLowerInvariant()
             "| $($item.Name) | $($item.Length) | ``$hash`` |" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+          }
 
       - name: Publish GitHub release for a Windows tag
         if: startsWith(github.ref, 'refs/tags/windows-v')
