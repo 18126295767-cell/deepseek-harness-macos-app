@@ -109,7 +109,7 @@ The output contains `DeepSeek-Harness-Windows-x64-v0.1.0.zip`,
 `DeepSeek-Harness-Setup-v0.1.0-x64.exe`, and a `.sha256` manifest. The NSIS
 installer is per-user and does not require administrator rights. The portable
 archive contains `launch-dsh.cmd`, `launch-dsh.ps1`, install/uninstall scripts,
-the two Windows guides, and the MIT license.
+12 selectable language guides, and the MIT license.
 
 Start the installed launcher with:
 

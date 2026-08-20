@@ -98,7 +98,7 @@ Set-Location windows
 输出包括 `DeepSeek-Harness-Windows-x64-v0.1.0.zip`、
 `DeepSeek-Harness-Setup-v0.1.0-x64.exe` 和 `.sha256` 校验文件。NSIS 安装器按当前用户
 安装，不要求管理员权限。便携包包含 `launch-dsh.cmd`、`launch-dsh.ps1`、安装/卸载脚本、
-两份 Windows 指南和 MIT 协议。
+12 种可选语言指南和 MIT 协议。
 
 启动已安装的启动器：
 
