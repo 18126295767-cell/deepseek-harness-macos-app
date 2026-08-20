@@ -30,3 +30,16 @@ test('all Windows language guides include the profile integrity recovery', () =>
     assert.match(contents, /tool_calls/i, guide);
   }
 });
+
+test('Windows executable discovery preserves complete fallback paths', () => {
+  for (const file of [
+    'windows/build-release.ps1',
+    'windows/launch-dsh.ps1',
+    'windows/bootstrap-build-environment.ps1',
+    '.github/workflows/windows-release.yml',
+  ]) {
+    const source = fs.readFileSync(path.join(root, file), 'utf8');
+    assert.match(source, /Select-Object -First 1/);
+    assert.doesNotMatch(source, /\$(?:nsisC|c)andidates(?:\.Count|\[0\])/);
+  }
+});

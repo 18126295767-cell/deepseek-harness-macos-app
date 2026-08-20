@@ -33,12 +33,12 @@ jobs:
         shell: pwsh
         run: |
           choco install nsis --no-progress --yes
-          $candidates = @(
+          $candidate = @(
             (Join-Path ${env:ProgramFiles(x86)} "NSIS\makensis.exe"),
             (Join-Path $env:ProgramFiles "NSIS\makensis.exe")
-          ) | Where-Object { $_ -and (Test-Path $_) }
-          if ($candidates.Count -eq 0) { throw "Chocolatey did not provide makensis.exe." }
-          Split-Path $candidates[0] | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          ) | Where-Object { $_ -and (Test-Path $_) } | Select-Object -First 1
+          if (-not $candidate) { throw "Chocolatey did not provide makensis.exe." }
+          Split-Path $candidate | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Validate PowerShell entry points
         shell: pwsh

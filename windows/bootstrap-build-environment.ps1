@@ -28,13 +28,13 @@ Install-WingetPackage "Git.Git"
 Install-WingetPackage "OpenJS.NodeJS.LTS"
 Install-WingetPackage "NSIS.NSIS"
 
-$nsisCandidates = @(
+$nsisCandidate = @(
   (Join-Path ${env:ProgramFiles(x86)} "NSIS\makensis.exe"),
   (Join-Path $env:ProgramFiles "NSIS\makensis.exe")
-) | Where-Object { $_ -and (Test-Path $_) }
-if ($nsisCandidates.Count -eq 0) { throw "NSIS installation did not provide makensis.exe." }
+) | Where-Object { $_ -and (Test-Path $_) } | Select-Object -First 1
+if (-not $nsisCandidate) { throw "NSIS installation did not provide makensis.exe." }
 
-$env:Path = "$(Split-Path $nsisCandidates[0]);$env:Path"
+$env:Path = "$(Split-Path $nsisCandidate);$env:Path"
 $nodeDirectory = Join-Path $env:ProgramFiles "nodejs"
 $gitDirectory = Join-Path $env:ProgramFiles "Git\cmd"
 foreach ($directory in @($nodeDirectory, $gitDirectory)) {
@@ -66,5 +66,5 @@ if (-not $SkipDshRuntime) {
 
 Write-Host "Windows build environment is ready."
 Write-Host "Node: $((Get-Command node.exe).Source)"
-Write-Host "NSIS: $($nsisCandidates[0])"
+Write-Host "NSIS: $nsisCandidate"
 if (-not $SkipDshRuntime) { Write-Host "DSH runtime: $DshRuntime" }
