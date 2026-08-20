@@ -60,7 +60,10 @@ test('Windows verification summary closes its artifact loop', () => {
 
 test('Windows documentation screenshots are isolated and verified', () => {
   const capture = fs.readFileSync(path.join(root, 'scripts', 'capture-windows-ui.mjs'), 'utf8');
-  const workflow = fs.readFileSync(path.join(root, '.github', 'workflows', 'windows-release.yml'), 'utf8');
+  const workflow = fs.readFileSync(
+    path.join(root, '.github', 'workflows', 'windows-screenshot-candidate.yml'),
+    'utf8',
+  );
 
   assert.match(capture, /viewport = \{ width: 1600, height: 1000 \}/);
   assert.match(capture, /locale: 'en-US'/);
@@ -72,6 +75,8 @@ test('Windows documentation screenshots are isolated and verified', () => {
   assert.match(capture, /windows-05-plugin-inventory\.png/);
   assert.match(workflow, /capture-windows-ui\.mjs/);
   assert.match(workflow, /windows-2025/);
+  assert.match(workflow, /runnerImage -ne "windows2025"/);
+  assert.match(workflow, /deepseek-harness-windows-screenshots/);
   assert.match(workflow, /1600x1000/);
 });
 
