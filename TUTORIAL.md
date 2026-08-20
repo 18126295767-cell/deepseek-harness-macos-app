@@ -28,6 +28,11 @@ cd /absolute/path/to/dsh-runtime
 test -f node_modules/@deepseek-ai/dsh/lib/bin.js
 ```
 
+An empty, isolated runtime should render like this before any workspace,
+account, or credential is added:
+
+![Official DSH Web runtime before configuration](docs/images/macos-dsh-home.png)
+
 Configure your provider and API key in the runtime's own settings. Never put
 credentials in this repository, a commit, a screenshot, or an issue report.
 
@@ -57,6 +62,11 @@ zsh ./scripts/build-app.sh \
   --install
 open "$HOME/Applications/DeepSeek Harness.app"
 ```
+
+The native shell should display the same local DSH workspace inside a macOS
+window:
+
+![Native DeepSeek Harness macOS shell](docs/images/macos-app-home.png)
 
 The LaunchAgent is generated at
 `~/Library/LaunchAgents/com.houxinran.deepseek-harness.plist`; logs go to
@@ -135,7 +145,9 @@ It waits for `127.0.0.1:3080`, opens the default browser, writes logs to
 `%LOCALAPPDATA%\DeepSeek Harness\logs`, and stops the child DSH process when
 the launcher exits. Use `-NoBrowser` for headless startup. GitHub Actions uses
 the same `windows/build-release.ps1` on a `windows-2025` runner and uploads the
-ZIP, installer, and hash file.
+ZIP, installer, hash file, and an isolated set of `1600x1000` documentation
+screenshots. Those Windows screenshots are generated from a fresh Chromium
+profile and must be visually reviewed before they are committed to this guide.
 
 The Windows launcher runs the same physical-copy check against
 `%DSH_HOME%\profiles\<profile>` (or `%USERPROFILE%\.dsh\profiles\<profile>`)

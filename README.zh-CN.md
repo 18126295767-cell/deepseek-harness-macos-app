@@ -9,6 +9,20 @@
 
 [English](README.md) · [上游与范围](UPSTREAM.md) · [许可证](LICENSE)
 
+## 实际界面
+
+隔离的本机会话中运行的 DeepSeek 官方 DSH Web runtime：
+
+![DeepSeek 官方 Harness Web runtime 首页](docs/images/macos-dsh-home.png)
+
+同一个本地 runtime 显示在原生 macOS 外壳中：
+
+![DeepSeek Harness 原生 macOS App 首页](docs/images/macos-app-home.png)
+
+图片均为源分辨率无损 PNG，不使用二次压缩的缩略图。[截图记录](docs/images/README.md)
+列出了捕获来源、尺寸、哈希和隐私规则。Windows 图片由真实 `windows-2025` Runner 生成，
+逐张目检后才会发布。
+
 ## 包含内容
 
 - 原生 Swift AppKit 窗口和现有 DeepSeek Harness 视觉外壳。
