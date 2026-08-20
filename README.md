@@ -10,6 +10,21 @@ does not open the Harness as a normal web page.
 
 [中文说明](README.zh-CN.md) · [上游与范围](UPSTREAM.md) · [许可证](LICENSE)
 
+## See it running
+
+Official DSH Web runtime on an isolated local session:
+
+![Official DeepSeek Harness Web runtime home screen](docs/images/macos-dsh-home.png)
+
+The same local runtime inside the native macOS shell:
+
+![DeepSeek Harness native macOS app home screen](docs/images/macos-app-home.png)
+
+These are lossless source-resolution PNGs, not recompressed thumbnails. The
+[screenshot record](docs/images/README.md) documents capture sources,
+dimensions, checksums, and privacy rules. Windows screenshots are produced on
+a real `windows-2025` runner and are published only after visual review.
+
 ## Included
 
 - Native Swift AppKit window with the existing DeepSeek Harness visual shell.

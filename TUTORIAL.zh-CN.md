@@ -26,6 +26,10 @@ cd /绝对路径/dsh-runtime
 test -f node_modules/@deepseek-ai/dsh/lib/bin.js
 ```
 
+在没有加入工作区、账号或凭据之前，隔离的新 runtime 应显示为：
+
+![配置前的 DeepSeek 官方 DSH Web runtime](docs/images/macos-dsh-home.png)
+
 请在运行时自己的设置中配置模型供应商和 API 密钥。不要把凭据放进本仓库、提交记录、
 截图或 issue。
 
@@ -53,6 +57,10 @@ zsh ./scripts/build-app.sh \
   --install
 open "$HOME/Applications/DeepSeek Harness.app"
 ```
+
+原生外壳应当在 macOS 窗口中显示同一个本地 DSH 工作区：
+
+![DeepSeek Harness 原生 macOS 外壳](docs/images/macos-app-home.png)
 
 LaunchAgent 会生成到
 `~/Library/LaunchAgents/com.houxinran.deepseek-harness.plist`，日志位于
@@ -121,7 +129,9 @@ Set-Location windows
 它会等待 `127.0.0.1:3080` 就绪、打开默认浏览器，把日志写入
 `%LOCALAPPDATA%\DeepSeek Harness\logs`，并在启动器退出时停止子 DSH 进程。无头启动可用
 `-NoBrowser`。GitHub Actions 会在 `windows-2025` runner 上调用同一个
-`windows/build-release.ps1`，并上传 ZIP、安装器和哈希文件。
+`windows/build-release.ps1`，并上传 ZIP、安装器、哈希文件以及一组隔离生成的
+`1600x1000` 教程截图。Windows 截图使用全新 Chromium profile，必须逐张目检后才会
+提交到教程中。
 
 Windows 启动器会在监听端口前，对 `%DSH_HOME%\profiles\<profile>`（未设置时为
 `%USERPROFILE%\.dsh\profiles\<profile>`）执行同一套物理副本检查。报告会指出冲突包和
