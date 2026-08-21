@@ -20,6 +20,8 @@ permissions:
 jobs:
   windows-x64:
     runs-on: windows-2025
+    env:
+      DSH_RUNNER_LABEL: windows-2025
     steps:
       - name: Check out source
         uses: actions/checkout@v4
@@ -122,7 +124,8 @@ jobs:
 
             $proof = Get-Content .\windows-screenshots\windows-screenshot-proof.json -Raw | ConvertFrom-Json
             if ($proof.platform -ne "win32") { throw "Screenshot proof did not report Windows." }
-            if ($proof.runnerImage -ne "windows2025") { throw "Unexpected runner image: $($proof.runnerImage)" }
+            if ($proof.runnerLabel -ne "windows-2025") { throw "Unexpected runner label: $($proof.runnerLabel)" }
+            if ($proof.runnerImage -notmatch '^win25') { throw "Unexpected runner image: $($proof.runnerImage)" }
             if ($proof.screenshots.Count -ne 5) { throw "Expected five Windows screenshots." }
             foreach ($screenshot in $proof.screenshots) {
               if ($screenshot.width -ne 1600 -or $screenshot.height -ne 1000) {
