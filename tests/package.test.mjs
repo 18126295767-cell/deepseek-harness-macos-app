@@ -83,6 +83,32 @@ test('Windows documentation screenshots are isolated and verified', () => {
   assert.match(workflow, /1600x1000/);
 });
 
+test('Windows workflows use a pinned, bounded official DSH installation', () => {
+  for (const file of [
+    '.github/workflows/windows-release.yml',
+    '.github/workflows/windows-screenshot-candidate.yml',
+  ]) {
+    const workflow = fs.readFileSync(path.join(root, file), 'utf8');
+    assert.match(workflow, /version: 9\.15\.9/, file);
+    assert.match(
+      workflow,
+      /pnpm add --save-exact --ignore-scripts @deepseek-ai\/dsh@0\.1\.0-rc\.7/,
+      file,
+    );
+  }
+
+  const screenshots = fs.readFileSync(
+    path.join(root, '.github', 'workflows', 'windows-screenshot-candidate.yml'),
+    'utf8',
+  );
+  const release = fs.readFileSync(
+    path.join(root, '.github', 'workflows', 'windows-release.yml'),
+    'utf8',
+  );
+  assert.match(screenshots, /timeout-minutes: 35/);
+  assert.match(release, /name: Smoke test official DSH Web runtime\n        timeout-minutes: 30/);
+});
+
 test('macOS documentation screenshots are lossless and linked', () => {
   assert.deepEqual(
     pngDimensions(path.join(root, 'docs', 'images', 'macos-dsh-home.png')),
