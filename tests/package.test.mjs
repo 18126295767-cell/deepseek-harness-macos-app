@@ -78,7 +78,10 @@ test('Windows documentation screenshots are isolated and verified', () => {
   assert.match(workflow, /capture-windows-ui\.mjs/);
   assert.match(workflow, /windows-2025/);
   assert.match(workflow, /PLAYWRIGHT_BROWSERS_PATH/);
-  assert.match(workflow, /runnerImage -ne "windows2025"/);
+  assert.match(capture, /runnerLabel: process\.env\.SCREENSHOT_RUNNER_LABEL/);
+  assert.match(workflow, /SCREENSHOT_RUNNER_LABEL: windows-2025/);
+  assert.match(workflow, /runnerLabel -ne "windows-2025"/);
+  assert.match(workflow, /windows2025\|win25-vs2026/);
   assert.match(workflow, /deepseek-harness-windows-screenshots/);
   assert.match(workflow, /1600x1000/);
 });
@@ -106,7 +109,7 @@ test('Windows workflows use a pinned, bounded official DSH installation', () => 
     'utf8',
   );
   assert.match(screenshots, /timeout-minutes: 35/);
-  assert.match(release, /name: Smoke test official DSH Web runtime\n        timeout-minutes: 30/);
+  assert.match(release, /name: Smoke test official DSH Web runtime\r?\n        timeout-minutes: 30/);
 });
 
 test('macOS documentation screenshots are lossless and linked', () => {
