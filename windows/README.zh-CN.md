@@ -4,6 +4,16 @@
 
 这是独立 DeepSeek Harness macOS 外壳的 Windows 配套包。它启动官方 `@deepseek-ai/dsh` Web runtime，并在默认浏览器打开 `http://127.0.0.1:<port>`。它不是 DeepSeek 官方桌面应用，也不包含 DSH runtime、API Key、profile、浏览器会话或仅适用于 macOS 的 `dsh-mac-control` 插件。
 
+以下界面已在真实 `windows-2025` Runner 的全新空白浏览器 profile 中验证：
+
+![Windows 上的 DeepSeek 官方空工作区](../docs/images/windows-03-empty-workspace.png)
+
+官方设置界面会显示 runtime 的插件清单：
+
+![Windows 上的 DeepSeek 官方插件清单](../docs/images/windows-05-plugin-inventory.png)
+
+[截图记录](../docs/images/README.md)包含 Runner 来源、SHA-256、OCR 隐私扫描和逐张目检结果。
+
 ## 环境要求
 
 - Windows 10 或 Windows 11 x64

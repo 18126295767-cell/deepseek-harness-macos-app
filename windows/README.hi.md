@@ -4,6 +4,16 @@
 
 यह community launcher official `@deepseek-ai/dsh` Web runtime शुरू करता है और default browser में `http://127.0.0.1:<port>` खोलता है। यह DeepSeek AI का official desktop app नहीं है। इसमें runtime, API keys, profiles, sessions या macOS-only `dsh-mac-control` plugin शामिल नहीं हैं।
 
+यह UI असली `windows-2025` Runner पर नए और खाली browser profile के साथ verify किया गया है:
+
+![Windows पर official DSH का खाली workspace](../docs/images/windows-03-empty-workspace.png)
+
+Official settings में runtime की plugin list दिखाई जाती है:
+
+![Windows पर official DSH plugin list](../docs/images/windows-05-plugin-inventory.png)
+
+[Screenshot record](../docs/images/README.md) में Runner provenance, SHA-256, OCR privacy scan और visual review results शामिल हैं।
+
 ## आवश्यकताएँ
 
 - Windows 10/11 x64

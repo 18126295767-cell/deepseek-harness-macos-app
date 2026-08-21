@@ -4,6 +4,16 @@
 
 這是一個社群版 Windows 啟動器，用來啟動官方 `@deepseek-ai/dsh` Web runtime，並在預設瀏覽器開啟 `http://127.0.0.1:<port>`。它不是 DeepSeek AI 官方桌面 App，也不包含 runtime、API Key、profile、瀏覽器會話或僅支援 macOS 的 `dsh-mac-control` 外掛。
 
+以下介面已在真正的 `windows-2025` Runner 和全新空白瀏覽器 profile 中驗證：
+
+![Windows 上的 DeepSeek 官方空白工作區](../docs/images/windows-03-empty-workspace.png)
+
+官方設定介面會顯示 runtime 的外掛清單：
+
+![Windows 上的 DeepSeek 官方外掛清單](../docs/images/windows-05-plugin-inventory.png)
+
+[截圖記錄](../docs/images/README.md)包含 Runner 來源、SHA-256、OCR 隱私掃描與逐張目視檢查結果。
+
 ## 需求
 
 - Windows 10/11 x64

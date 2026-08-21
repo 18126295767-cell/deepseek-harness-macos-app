@@ -6,6 +6,16 @@
 
 هذا مشغل مجتمعي يبدأ runtime الويب الرسمي `@deepseek-ai/dsh` ويفتح `http://127.0.0.1:<port>` في المتصفح الافتراضي. ليس تطبيق سطح مكتب رسميًا من DeepSeek AI، ولا يحتوي على runtime أو مفاتيح API أو profiles أو جلسات أو إضافة `dsh-mac-control` الخاصة بـ macOS.
 
+تم التحقق من الواجهة على Runner حقيقي باسم `windows-2025` باستخدام profile متصفح جديد وفارغ:
+
+![مساحة العمل الفارغة في DSH الرسمي على Windows](../docs/images/windows-03-empty-workspace.png)
+
+تعرض الإعدادات الرسمية قائمة إضافات runtime:
+
+![قائمة إضافات DSH الرسمي على Windows](../docs/images/windows-05-plugin-inventory.png)
+
+يتضمن [سجل الصور](../docs/images/README.md) مصدر Runner وقيم SHA-256 وفحص الخصوصية عبر OCR ونتائج المراجعة البصرية.
+
 ## المتطلبات
 
 - Windows 10/11 x64

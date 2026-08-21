@@ -74,6 +74,18 @@ Web UI，不宣称在 Windows 上提供 macOS 的 Automation/Accessibility 工�
 `windows/build-release.ps1` 生成便携 ZIP、NSIS 当前用户安装包和 SHA-256 校验文件。
 GitHub Actions 会在真实的 `windows-2025` runner 上运行同样的构建并上传产物。
 
+Windows 上的 DeepSeek 官方 DSH Web runtime 会从空工作区启动：
+
+![Windows 上的 DeepSeek 官方 Harness 空工作区](docs/images/windows-03-empty-workspace.png)
+
+官方设置界面可以检查当前插件清单：
+
+![Windows 上的 DeepSeek 官方 Harness 插件清单](docs/images/windows-05-plugin-inventory.png)
+
+两张图片均为 Windows Runner 在全新、非持久化浏览器上下文中生成的 `1600x1000`
+无损原图。[截图记录](docs/images/README.md)列出了来源提交、SHA-256、OCR 隐私扫描和
+逐张目检结果。
+
 安装 Release 前请阅读 [Windows 指南](windows/README.zh-CN.md)，英文说明见
 [Windows guide](windows/README.md)。
 

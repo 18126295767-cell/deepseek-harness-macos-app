@@ -131,7 +131,32 @@ Set-Location windows
 `-NoBrowser`。GitHub Actions 会在 `windows-2025` runner 上调用同一个
 `windows/build-release.ps1`，并上传 ZIP、安装器、哈希文件以及一组隔离生成的
 `1600x1000` 教程截图。Windows 截图使用全新 Chromium profile，必须逐张目检后才会
-提交到教程中。
+提交到教程中。本次公开的五张原图已经通过 SHA-256 核对、本地 OCR 隐私扫描和逐张
+视觉检查：
+
+1. 官方开发者预览提示：
+
+   ![Windows 上的 DeepSeek 官方开发者预览提示](docs/images/windows-01-developer-preview.png)
+
+2. API Key 为空的引导界面：
+
+   ![Windows 上的 DeepSeek 官方 API Key 引导界面](docs/images/windows-02-api-key-onboarding.png)
+
+3. 完成引导后的空工作区：
+
+   ![Windows 上的 DeepSeek 官方空工作区](docs/images/windows-03-empty-workspace.png)
+
+4. API Key 为空的模型设置：
+
+   ![Windows 上的 DeepSeek 官方模型设置](docs/images/windows-04-model-settings.png)
+
+5. 官方插件清单：
+
+   ![Windows 上的 DeepSeek 官方插件清单](docs/images/windows-05-plugin-inventory.png)
+
+机器可读的 [Runner 证明](docs/images/windows-screenshot-proof.json)记录了 Windows
+版本、架构、Runner 标签与镜像、来源提交、全新浏览器上下文、图片尺寸、字节数和
+SHA-256。
 
 Windows 启动器会在监听端口前，对 `%DSH_HOME%\profiles\<profile>`（未设置时为
 `%USERPROFILE%\.dsh\profiles\<profile>`）执行同一套物理副本检查。报告会指出冲突包和

@@ -4,6 +4,16 @@
 
 이 프로젝트는 공식 `@deepseek-ai/dsh` Web runtime을 실행하고 기본 브라우저에서 `http://127.0.0.1:<port>`를 여는 Windows용 커뮤니티 런처입니다. DeepSeek AI의 공식 데스크톱 앱이 아니며 runtime, API 키, profile, 세션, macOS 전용 `dsh-mac-control`을 포함하지 않습니다.
 
+실제 `windows-2025` Runner와 새 빈 브라우저 profile에서 검증한 화면입니다.
+
+![Windows의 공식 DSH 빈 작업 공간](../docs/images/windows-03-empty-workspace.png)
+
+공식 설정 화면에서 runtime의 플러그인 목록을 확인할 수 있습니다.
+
+![Windows의 공식 DSH 플러그인 목록](../docs/images/windows-05-plugin-inventory.png)
+
+[스크린샷 기록](../docs/images/README.md)에는 Runner 출처, SHA-256, OCR 개인정보 검사 및 육안 검토 결과가 포함됩니다.
+
 ## 요구 사항
 
 - Windows 10/11 x64

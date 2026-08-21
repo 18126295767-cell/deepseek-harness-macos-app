@@ -147,7 +147,32 @@ the launcher exits. Use `-NoBrowser` for headless startup. GitHub Actions uses
 the same `windows/build-release.ps1` on a `windows-2025` runner and uploads the
 ZIP, installer, hash file, and an isolated set of `1600x1000` documentation
 screenshots. Those Windows screenshots are generated from a fresh Chromium
-profile and must be visually reviewed before they are committed to this guide.
+profile. The published set below passed SHA-256 verification, a local OCR
+privacy scan, and a visual review before it was committed:
+
+1. Official developer-preview notice:
+
+   ![Official DSH developer-preview notice on Windows](docs/images/windows-01-developer-preview.png)
+
+2. Empty API-key onboarding form:
+
+   ![Official DSH API-key onboarding on Windows](docs/images/windows-02-api-key-onboarding.png)
+
+3. Empty workspace after onboarding:
+
+   ![Official DSH empty workspace on Windows](docs/images/windows-03-empty-workspace.png)
+
+4. Model settings with an empty API-key field:
+
+   ![Official DSH model settings on Windows](docs/images/windows-04-model-settings.png)
+
+5. Official plugin inventory:
+
+   ![Official DSH plugin inventory on Windows](docs/images/windows-05-plugin-inventory.png)
+
+The machine-readable [runner proof](docs/images/windows-screenshot-proof.json)
+records the Windows release, architecture, runner label/image, source commit,
+fresh browser context, dimensions, byte sizes, and SHA-256 values.
 
 The Windows launcher runs the same physical-copy check against
 `%DSH_HOME%\profiles\<profile>` (or `%USERPROFILE%\.dsh\profiles\<profile>`)

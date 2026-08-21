@@ -4,6 +4,16 @@
 
 これは公式 `@deepseek-ai/dsh` Web runtime を起動し、既定のブラウザで `http://127.0.0.1:<port>` を開く Windows 用コミュニティランチャーです。DeepSeek AI 公式デスクトップアプリではありません。runtime、API キー、profile、セッション、macOS 専用の `dsh-mac-control` は同梱しません。
 
+実際の `windows-2025` Runner と新しい空のブラウザ profile で検証した画面です。
+
+![Windows 上の公式 DSH 空ワークスペース](../docs/images/windows-03-empty-workspace.png)
+
+公式設定画面では runtime のプラグイン一覧を確認できます。
+
+![Windows 上の公式 DSH プラグイン一覧](../docs/images/windows-05-plugin-inventory.png)
+
+[スクリーンショット記録](../docs/images/README.md)には Runner の出所、SHA-256、OCR プライバシースキャン、目視確認結果があります。
+
 ## 要件
 
 - Windows 10/11 x64

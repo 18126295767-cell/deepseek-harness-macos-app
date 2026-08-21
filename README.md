@@ -82,6 +82,18 @@ ZIP, an NSIS per-user installer, and SHA-256 manifest with
 `windows/build-release.ps1`. The GitHub Actions workflow runs on a real
 `windows-2025` runner and uploads the same artifacts.
 
+The official DSH Web runtime starts with an empty workspace on Windows:
+
+![Official DeepSeek Harness empty workspace on Windows](docs/images/windows-03-empty-workspace.png)
+
+Its plugin inventory is exposed through the official settings UI:
+
+![Official DeepSeek Harness plugin inventory on Windows](docs/images/windows-05-plugin-inventory.png)
+
+Both images are lossless `1600x1000` captures from a fresh, non-persistent
+browser context on the Windows runner. See the [screenshot record](docs/images/README.md)
+for the source commit, checksums, OCR privacy scan, and visual review.
+
 Read the [Windows guide](windows/README.md) or
 [中文 Windows 指南](windows/README.zh-CN.md) before installing a release.
 

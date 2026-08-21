@@ -4,6 +4,16 @@
 
 Este lanzador comunitario inicia el runtime Web oficial `@deepseek-ai/dsh` y abre `http://127.0.0.1:<port>` en el navegador predeterminado. No es una aplicación de escritorio oficial de DeepSeek AI y no incluye el runtime, claves API, perfiles, sesiones ni el plugin `dsh-mac-control`, que es exclusivo de macOS.
 
+Interfaz verificada en un Runner `windows-2025` real con un perfil de navegador nuevo y vacío:
+
+![Espacio de trabajo vacío del DSH oficial en Windows](../docs/images/windows-03-empty-workspace.png)
+
+La configuración oficial muestra el inventario de plugins del runtime:
+
+![Inventario de plugins del DSH oficial en Windows](../docs/images/windows-05-plugin-inventory.png)
+
+El [registro de capturas](../docs/images/README.md) incluye procedencia del Runner, SHA-256, análisis OCR de privacidad y revisión visual.
+
 ## Requisitos
 
 - Windows 10/11 x64

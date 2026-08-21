@@ -4,6 +4,16 @@
 
 This is the Windows companion package for the independent DeepSeek Harness macOS shell. It starts the official `@deepseek-ai/dsh` Web runtime and opens `http://127.0.0.1:<port>` in the default browser. It is not an official DeepSeek desktop application and it does not include the DSH runtime, API keys, profiles, browser sessions, or the macOS-only `dsh-mac-control` plugin.
 
+Verified on a real `windows-2025` runner with a fresh, empty browser profile:
+
+![Official DSH empty workspace on Windows](../docs/images/windows-03-empty-workspace.png)
+
+The official settings UI exposes the runtime's plugin inventory:
+
+![Official DSH plugin inventory on Windows](../docs/images/windows-05-plugin-inventory.png)
+
+The [screenshot record](../docs/images/README.md) includes runner provenance, SHA-256 hashes, OCR privacy scanning, and visual-review results.
+
 ## Requirements
 
 - Windows 10 or Windows 11 x64
