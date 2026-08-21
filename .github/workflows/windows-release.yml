@@ -29,6 +29,12 @@ jobs:
         with:
           node-version: "22"
 
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
+          run_install: false
+
       - name: Install NSIS
         shell: pwsh
         run: |
@@ -55,6 +61,7 @@ jobs:
         run: node --test
 
       - name: Smoke test official DSH Web runtime
+        timeout-minutes: 30
         shell: pwsh
         run: |
           $runtime = Join-Path $env:RUNNER_TEMP "dsh-runtime"
@@ -63,7 +70,7 @@ jobs:
           Push-Location $runtime
           try {
             npm init -y | Out-Host
-            npm install --save-exact @deepseek-ai/dsh@0.1.0-rc.7 | Out-Host
+            pnpm add --save-exact --ignore-scripts @deepseek-ai/dsh@0.1.0-rc.7 | Out-Host
           } finally {
             Pop-Location
           }
