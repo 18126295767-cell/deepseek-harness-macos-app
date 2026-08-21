@@ -41,7 +41,10 @@ const page = await context.newPage();
 
 async function settle() {
   await page.waitForLoadState('domcontentloaded');
-  await page.evaluate(() => document.fonts?.ready);
+  await page.evaluate(() => Promise.race([
+    document.fonts?.ready ?? Promise.resolve(),
+    new Promise((resolve) => setTimeout(resolve, 5_000)),
+  ]));
   await page.waitForTimeout(500);
 }
 

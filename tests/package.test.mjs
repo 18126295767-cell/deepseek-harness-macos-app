@@ -70,6 +70,8 @@ test('Windows documentation screenshots are isolated and verified', () => {
   assert.match(capture, /parsedUrl\.hostname !== '127\.0\.0\.1'/);
   assert.match(capture, /fresh non-persistent Playwright context/);
   assert.match(capture, /validatePng/);
+  assert.match(capture, /Promise\.race/);
+  assert.match(capture, /setTimeout\(resolve, 5_000\)/);
   assert.match(capture, /windows-screenshot-proof\.json/);
   assert.match(capture, /crypto\.createHash\('sha256'\)/);
   assert.match(capture, /windows-05-plugin-inventory\.png/);
