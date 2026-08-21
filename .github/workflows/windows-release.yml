@@ -57,6 +57,9 @@ jobs:
       - name: Install screenshot runtime
         shell: pwsh
         run: |
+          $browserPath = Join-Path $env:RUNNER_TEMP "ms-playwright"
+          $env:PLAYWRIGHT_BROWSERS_PATH = $browserPath
+          "PLAYWRIGHT_BROWSERS_PATH=$browserPath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           npm install --no-save --package-lock=false playwright@1.55.0
           npx playwright install chromium
 
@@ -109,6 +112,19 @@ jobs:
             }
             Write-Host "Official DSH Web runtime returned HTTP 200 with a boot manifest."
             node .\scripts\capture-windows-ui.mjs --url "http://127.0.0.1:3080/" --output .\windows-screenshots
+
+            $proof = Get-Content .\windows-screenshots\windows-screenshot-proof.json -Raw | ConvertFrom-Json
+            if ($proof.platform -ne "win32") { throw "Screenshot proof did not report Windows." }
+            if ($proof.runnerImage -ne "windows2025") { throw "Unexpected runner image: $($proof.runnerImage)" }
+            if ($proof.screenshots.Count -ne 5) { throw "Expected five Windows screenshots." }
+            foreach ($screenshot in $proof.screenshots) {
+              if ($screenshot.width -ne 1600 -or $screenshot.height -ne 1000) {
+                throw "Unexpected dimensions for $($screenshot.file)."
+              }
+              if ($screenshot.sha256 -notmatch '^[a-f0-9]{64}$') {
+                throw "Invalid SHA-256 for $($screenshot.file)."
+              }
+            }
           } finally {
             $launcher.Refresh()
             if (-not $launcher.HasExited) {
