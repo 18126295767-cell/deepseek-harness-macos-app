@@ -46,6 +46,8 @@ jobs:
           npx playwright install chromium
 
       - name: Capture official DSH UI on Windows
+        env:
+          SCREENSHOT_RUNNER_LABEL: windows-2025
         shell: pwsh
         run: |
           $runtime = Join-Path $env:RUNNER_TEMP "dsh-runtime"
@@ -101,7 +103,10 @@ jobs:
 
             $proof = Get-Content .\windows-screenshots\windows-screenshot-proof.json -Raw | ConvertFrom-Json
             if ($proof.platform -ne "win32") { throw "Screenshot proof did not report Windows." }
-            if ($proof.runnerImage -ne "windows2025") { throw "Unexpected runner image: $($proof.runnerImage)" }
+            if ($proof.runnerLabel -ne "windows-2025") { throw "Unexpected runner label: $($proof.runnerLabel)" }
+            if ($proof.runnerImage -notmatch '^(windows2025|win25-vs2026)$') {
+              throw "Unexpected Windows 2025 runner image: $($proof.runnerImage)"
+            }
             if ($proof.screenshots.Count -ne 5) { throw "Expected five Windows screenshots." }
             foreach ($screenshot in $proof.screenshots) {
               if ($screenshot.width -ne 1600 -or $screenshot.height -ne 1000) {
@@ -136,7 +141,8 @@ jobs:
             "## Windows documentation screenshot evidence",
             "",
             "- Commit: ``${{ github.sha }}``",
-            "- Runner: ``windows-2025``",
+            "- Runner label: ``windows-2025``",
+            "- Runner image: ``$env:ImageOS``",
             "- Runtime: ``@deepseek-ai/dsh@0.1.0-rc.7``",
             "- Browser profile: fresh non-persistent Playwright context",
             "- Output: five lossless ``1600x1000`` PNG files plus SHA-256 proof"
