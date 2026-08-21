@@ -72,7 +72,7 @@ jobs:
           Push-Location $runtime
           try {
             npm init -y | Out-Host
-            npm install --save-exact @deepseek-ai/dsh@0.1.0-rc.7 | Out-Host
+            npm install --save-exact --ignore-scripts --no-audit --no-fund @deepseek-ai/dsh@0.1.0-rc.7 | Out-Host
           } finally {
             Pop-Location
           }
