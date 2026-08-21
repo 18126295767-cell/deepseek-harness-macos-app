@@ -77,6 +77,7 @@ test('Windows documentation screenshots are isolated and verified', () => {
   assert.match(capture, /windows-05-plugin-inventory\.png/);
   assert.match(workflow, /capture-windows-ui\.mjs/);
   assert.match(workflow, /windows-2025/);
+  assert.match(workflow, /PLAYWRIGHT_BROWSERS_PATH/);
   assert.match(workflow, /runnerImage -ne "windows2025"/);
   assert.match(workflow, /deepseek-harness-windows-screenshots/);
   assert.match(workflow, /1600x1000/);
